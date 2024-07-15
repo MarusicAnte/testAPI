@@ -1,4 +1,6 @@
-﻿namespace testAPI.Models.DTO.UserDtos
+﻿using testAPI.Models.DTO.GradeDtos;
+
+namespace testAPI.Models.DTO.UserDtos
 {
     public class UserSubjectDto
     {

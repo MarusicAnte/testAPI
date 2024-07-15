@@ -12,8 +12,8 @@ using testAPI.Data;
 namespace testAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240706083947_Added Notifications table and SubjectsNotifications join table")]
-    partial class AddedNotificationstableandSubjectsNotificationsjointable
+    [Migration("20240714122618_Added Grades")]
+    partial class AddedGrades
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,6 +94,44 @@ namespace testAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("DepartmentsUsers");
+                });
+
+            modelBuilder.Entity("testAPI.Models.Domain.Grade", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("SubjectId")
+                        .IsUnique();
+
+                    b.ToTable("Grades");
                 });
 
             modelBuilder.Entity("testAPI.Models.Domain.Notification", b =>
@@ -276,6 +314,25 @@ namespace testAPI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("testAPI.Models.Domain.Grade", b =>
+                {
+                    b.HasOne("testAPI.Models.Domain.User", "Student")
+                        .WithMany("Grades")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("testAPI.Models.Domain.Subject", "Subject")
+                        .WithOne("Grade")
+                        .HasForeignKey("testAPI.Models.Domain.Grade", "SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Subject");
+                });
+
             modelBuilder.Entity("testAPI.Models.Domain.Notification", b =>
                 {
                     b.HasOne("testAPI.Models.Domain.User", "Sender")
@@ -352,6 +409,9 @@ namespace testAPI.Migrations
                 {
                     b.Navigation("DepartmentsSubjects");
 
+                    b.Navigation("Grade")
+                        .IsRequired();
+
                     b.Navigation("SubjectsNotifications");
 
                     b.Navigation("SubjectsUsers");
@@ -360,6 +420,8 @@ namespace testAPI.Migrations
             modelBuilder.Entity("testAPI.Models.Domain.User", b =>
                 {
                     b.Navigation("DepartmentsUsers");
+
+                    b.Navigation("Grades");
 
                     b.Navigation("Notifications");
 

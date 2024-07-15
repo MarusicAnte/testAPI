@@ -93,6 +93,47 @@ namespace testAPI.Migrations
                     b.ToTable("DepartmentsUsers");
                 });
 
+            modelBuilder.Entity("testAPI.Models.Domain.Grade", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProfessorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProfessorId");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("SubjectId")
+                        .IsUnique();
+                });
+
             modelBuilder.Entity("testAPI.Models.Domain.Notification", b =>
                 {
                     b.Property<int>("Id")
@@ -273,6 +314,7 @@ namespace testAPI.Migrations
                     b.Navigation("User");
                 });
 
+            
             modelBuilder.Entity("testAPI.Models.Domain.Notification", b =>
                 {
                     b.HasOne("testAPI.Models.Domain.User", "Sender")
@@ -283,6 +325,7 @@ namespace testAPI.Migrations
 
                     b.Navigation("Sender");
                 });
+
 
             modelBuilder.Entity("testAPI.Models.Domain.SubjectNotificationJoin", b =>
                 {
@@ -349,6 +392,9 @@ namespace testAPI.Migrations
                 {
                     b.Navigation("DepartmentsSubjects");
 
+                    b.Navigation("Grade")
+                        .IsRequired();
+
                     b.Navigation("SubjectsNotifications");
 
                     b.Navigation("SubjectsUsers");
@@ -359,6 +405,8 @@ namespace testAPI.Migrations
                     b.Navigation("DepartmentsUsers");
 
                     b.Navigation("Notifications");
+
+                    b.Navigation("StudentGrades");
 
                     b.Navigation("SubjectsUsers");
                 });

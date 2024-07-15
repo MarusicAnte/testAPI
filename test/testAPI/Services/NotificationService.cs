@@ -5,6 +5,7 @@ using testAPI.Interfaces;
 using testAPI.Logic;
 using testAPI.Models.Domain;
 using testAPI.Models.DTO.NotificationDtos;
+using testAPI.Query;
 
 namespace testAPI.Services
 {
@@ -19,10 +20,12 @@ namespace testAPI.Services
         }
 
 
-        public async Task<List<NotificationDto>> GetAllNotifications()
+        public async Task<List<NotificationDto>> GetAllNotifications(NotificationQuery notificationQuery)
         {
-           var notificationsDomain = await _dbContext.Notifications.Include(n => n.SubjectsNotifications)
+           var notificationsDomain = await notificationQuery.GetNotificationQuery(_dbContext.Notifications
+                                                                   .Include(n => n.SubjectsNotifications)
                                                                    .ThenInclude(sn => sn.Subject)
+                                                                   .Include(n => n.Sender))
                                                                    .ToListAsync();
 
             if (notificationsDomain is null || notificationsDomain.Count == 0)

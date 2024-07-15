@@ -17,6 +17,7 @@ namespace testAPI.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<Classroom> Classrooms { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Grade> Grades { get; set; }
         public DbSet<SubjectUserJoin> SubjectsUsers { get; set; }
         public DbSet<DepartmentUserJoin> DepartmentsUsers { get; set; }
         public DbSet<DepartmentSubjectJoin> DepartmentsSubjects { get; set; }
@@ -92,6 +93,21 @@ namespace testAPI.Data
                 .HasOne(sn => sn.Notification)
                 .WithMany(n => n.SubjectsNotifications)
                 .HasForeignKey(sn => sn.NotificationId);
+
+
+            // Grades
+            modelBuilder.Entity<Grade>()
+                .HasKey(g => g.Id);
+
+            modelBuilder.Entity<Grade>()
+                .HasOne(g => g.Subject)
+                .WithOne(s => s.Grade)
+                .HasForeignKey<Grade>(g => g.SubjectId);
+
+            modelBuilder.Entity<Grade>()
+                .HasOne(g => g.Student)
+                .WithMany(u => u.Grades)
+                .HasForeignKey(g => g.StudentId);
         }
 
     }

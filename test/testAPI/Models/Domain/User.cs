@@ -15,6 +15,7 @@
         public ICollection<SubjectUserJoin> SubjectsUsers { get; set; }
         public ICollection<DepartmentUserJoin> DepartmentsUsers { get; set; }
         public ICollection<Notification> Notifications { get; set; }
+        public ICollection<Grade> Grades { get; set; }
         #endregion
     }
 }

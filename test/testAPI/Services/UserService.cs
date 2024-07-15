@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using testAPI.Data;
 using testAPI.Interfaces;
 using testAPI.Models.Domain;
@@ -26,7 +24,8 @@ namespace testAPI.Services
             //                                        .ThenInclude(du => du.Department)
             //                                        .ToListAsync();
 
-            var usersDomain = await userQuery.GetUserQuery(_dbContext.Users.Include(u => u.SubjectsUsers)
+            var usersDomain = await userQuery.GetUserQuery(_dbContext.Users.Include(u => u.Role)
+                                                                           .Include(u => u.SubjectsUsers)
                                                                            .ThenInclude(su => su.Subject)
                                                                            .Include(u => u.DepartmentsUsers)
                                                                            .ThenInclude(du => du.Department)).ToListAsync();
@@ -92,13 +91,13 @@ namespace testAPI.Services
                 Password = userDomain.Password,
                 ImageURL = userDomain.ImageURL,
                 RoleId = userDomain.RoleId,
-                Subjects = userDomain.SubjectsUsers.Select(s => new UserSubjectDto
+                Subjects = userDomain.SubjectsUsers.Select(su => new UserSubjectDto
                 {
-                    Id = s.Subject.Id,
-                    Name = s.Subject.Name,
-                    Semester = s.Subject.Semester,
-                    ECTS = s.Subject.ECTS,
-                    Description = s.Subject.Description
+                    Id = su.Subject.Id,
+                    Name = su.Subject.Name,
+                    Semester = su.Subject.Semester,
+                    ECTS = su.Subject.ECTS,
+                    Description = su.Subject.Description
                 }).ToList(),
                 Departments = userDomain.DepartmentsUsers.Select(d => new UserDepartmentsDto
                 { 
@@ -156,7 +155,7 @@ namespace testAPI.Services
                     Name = su.Subject.Name,
                     Semester = su.Subject.Semester,
                     ECTS = su.Subject.ECTS,
-                    Description = su.Subject.Description
+                    Description = su.Subject.Description                    
                 }).ToList(),
                 Departments = userDomain.DepartmentsUsers.Select(d => new UserDepartmentsDto
                 {
@@ -198,6 +197,7 @@ namespace testAPI.Services
 
             // Get updated user
             var updatedUserDomain = await _dbContext.Users
+                .Include(u => u.Role)
                 .Include(u => u.SubjectsUsers)
                 .ThenInclude(su => su.Subject)
                 .Include(u => u.DepartmentsUsers)
@@ -259,13 +259,13 @@ namespace testAPI.Services
                 Password = userDomain.Password,
                 ImageURL = userDomain.ImageURL,
                 RoleId = userDomain.RoleId,
-                Subjects = userDomain.SubjectsUsers.Select(s => new UserSubjectDto
+                Subjects = userDomain.SubjectsUsers.Select(su => new UserSubjectDto
                 {
-                    Id = s.Subject.Id,
-                    Name = s.Subject.Name,
-                    Semester = s.Subject.Semester,
-                    ECTS = s.Subject.ECTS,
-                    Description = s.Subject.Description
+                    Id = su.Subject.Id,
+                    Name = su.Subject.Name,
+                    Semester = su.Subject.Semester,
+                    ECTS = su.Subject.ECTS,
+                    Description = su.Subject.Description
                 }).ToList(),
                 Departments = userDomain.DepartmentsUsers.Select(d => new UserDepartmentsDto
                 {

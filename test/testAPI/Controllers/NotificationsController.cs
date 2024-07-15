@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using testAPI.Interfaces;
 using testAPI.Models.DTO.NotificationDtos;
+using testAPI.Query;
 
 namespace testAPI.Controllers
 {
@@ -19,9 +20,9 @@ namespace testAPI.Controllers
 
 
         [HttpGet]
-        public async Task<List<NotificationDto>> GetAll()
+        public async Task<List<NotificationDto>> GetAll([FromQuery] NotificationQuery notificationQuery)
         {
-            return await _notificationService.GetAllNotifications();
+            return await _notificationService.GetAllNotifications(notificationQuery);
         }
 
 

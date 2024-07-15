@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using testAPI.Constants;
 using testAPI.Data;
+using testAPI.Helpers;
 using testAPI.Interfaces;
 using testAPI.Logic;
 using testAPI.Services;
@@ -30,7 +32,9 @@ builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IClassroomService, ClassroomService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<NotificationLogic>();
+builder.Services.AddScoped<UserHelper>();
 
 var app = builder.Build();
 
