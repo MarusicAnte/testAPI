@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using testAPI.Models.Domain;
 
 namespace testAPI.Data
@@ -18,6 +19,8 @@ namespace testAPI.Data
         public DbSet<Classroom> Classrooms { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Grade> Grades { get; set; }
+        public DbSet<Exam> Exams { get; set; }
+        public DbSet<ExamRegistration> ExamRegistrations { get; set; }
         public DbSet<SubjectUserJoin> SubjectsUsers { get; set; }
         public DbSet<DepartmentUserJoin> DepartmentsUsers { get; set; }
         public DbSet<DepartmentSubjectJoin> DepartmentsSubjects { get; set; }
@@ -100,14 +103,71 @@ namespace testAPI.Data
                 .HasKey(g => g.Id);
 
             modelBuilder.Entity<Grade>()
+                .HasIndex(g => new { g.StudentId, g.SubjectId })
+                .IsUnique();
+
+            modelBuilder.Entity<Grade>()
                 .HasOne(g => g.Subject)
-                .WithOne(s => s.Grade)
-                .HasForeignKey<Grade>(g => g.SubjectId);
+                .WithMany(s => s.Grades)
+                .HasForeignKey(g => g.SubjectId);
 
             modelBuilder.Entity<Grade>()
                 .HasOne(g => g.Student)
-                .WithMany(u => u.Grades)
-                .HasForeignKey(g => g.StudentId);
+                .WithMany(u => u.StudentGrades)
+                .HasForeignKey(g => g.StudentId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Grade>()
+                .HasOne(g => g.Professor)
+                .WithMany(p => p.ProfessorGrades)
+                .HasForeignKey(g => g.ProfessorId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+
+            // Exams
+            modelBuilder.Entity<Exam>()
+                .HasKey(e => e.Id);
+
+            modelBuilder.Entity<Exam>()
+                .HasOne(e => e.Classroom)
+                .WithMany(c => c.Exams)
+                .HasForeignKey(e => e.ClassroomId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Exam>()
+                .HasOne(e => e.Subject)
+                .WithMany(s => s.Exams)
+                .HasForeignKey(e => e.SubjectId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Exam>()
+                .HasOne(e => e.Professor)
+                .WithMany(p => p.Exams)
+                .HasForeignKey(e => e.ProfessorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            // ExamRegistrations
+            modelBuilder.Entity<ExamRegistration>()
+                .HasKey(er => er.Id);
+
+            modelBuilder.Entity<ExamRegistration>()
+                .HasOne(er => er.Student)
+                .WithMany(s => s.ExamRegistrations)
+                .HasForeignKey(er => er.StudentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ExamRegistration>()
+                .HasOne(er => er.Exam)
+                .WithMany(e => e.ExamRegistrations)
+                .HasForeignKey(er => er.ExamId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ExamRegistration>()
+                .HasIndex(er => er.StudentId);
+
+            modelBuilder.Entity<ExamRegistration>()
+                .HasIndex(er => er.ExamId);
         }
 
     }

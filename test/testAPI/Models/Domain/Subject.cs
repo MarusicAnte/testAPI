@@ -13,7 +13,8 @@
         public ICollection<SubjectUserJoin> SubjectsUsers { get; set; }
         public ICollection<DepartmentSubjectJoin> DepartmentsSubjects { get; set; }
         public ICollection<SubjectNotificationJoin> SubjectsNotifications { get; set; }
-        public Grade Grade { get; set; }
+        public ICollection<Grade> Grades { get; set; }
+        public ICollection<Exam> Exams { get; set; }
         #endregion
     }
 }

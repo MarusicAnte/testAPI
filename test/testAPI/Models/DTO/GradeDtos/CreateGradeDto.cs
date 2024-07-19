@@ -8,5 +8,6 @@
         public int Value { get; set; }
         public int StudentId { get; set; }
         public int SubjectId { get; set; }
+        public int ProfessorId { get; set; }
     }
 }

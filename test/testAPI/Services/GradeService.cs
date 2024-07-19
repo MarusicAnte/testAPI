@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using testAPI.Constants;
 using testAPI.Data;
 using testAPI.Interfaces;
+using testAPI.Logic;
 using testAPI.Models.Domain;
 using testAPI.Models.DTO.GradeDtos;
 using testAPI.Query;
@@ -13,18 +14,23 @@ namespace testAPI.Services
     public class GradeService : IGradeService
     {
         private readonly ApplicationDBContext _dbContext;
-        public GradeService(ApplicationDBContext dBContext)
+        private readonly GradeLogic _gradeLogic;
+        public GradeService(ApplicationDBContext dBContext, GradeLogic gradeLogic)
         {
             _dbContext = dBContext;
+            _gradeLogic = gradeLogic;
         }
 
         public async Task<List<GradeDto>> GetAllGrades(GradeQuery gradeQuery)
         {
             var gradesDomain = await gradeQuery.GetGradeQuery(_dbContext.Grades.Include(g => g.Student)
-                                                                               .ThenInclude(u => u.Role)
-                                                                               .Include(g => g.Subject))
-                                                                               .Where(g => g.Student.Role.Name.Equals(RolesConstant.Student))
-                                                                               .ToListAsync();
+                                                                               .ThenInclude(s => s.Role)
+                                                                               .Include(g => g.Professor)
+                                                                               .ThenInclude(p => p.Role)
+                                                                               .Include(g => g.Subject)
+                                                             )
+                                                             .Where(g => g.Student.Role.Name.Equals(RolesConstant.Student))
+                                                             .ToListAsync();
 
             if (gradesDomain is null || gradesDomain.Count == 0)
                 throw new Exception($"Grades does not exist !");
@@ -39,7 +45,8 @@ namespace testAPI.Services
                     Description = gradeDomain.Description,
                     Value = gradeDomain.Value,
                     Subject = gradeDomain.Subject.Name,
-                    Student = $"{gradeDomain.Student.FirstName} {gradeDomain.Student.LastName}"
+                    Student = $"{gradeDomain.Student.FirstName} {gradeDomain.Student.LastName}",
+                    Professor = $"{gradeDomain.Professor.FirstName} {gradeDomain.Professor.LastName}"
                 });
             }
 
@@ -50,7 +57,9 @@ namespace testAPI.Services
         public async Task<GradeDto> GetGradeById(int id)
         {
             var gradeDomain = await _dbContext.Grades.Include(g => g.Student)
-                                                     .ThenInclude(u => u.Role)
+                                                     .ThenInclude(s => s.Role)
+                                                     .Include(g => g.Professor)
+                                                     .ThenInclude(p => p.Role)
                                                      .Include(g => g.Subject)
                                                      .FirstOrDefaultAsync(x => x.Id == id);
 
@@ -68,7 +77,8 @@ namespace testAPI.Services
                 Description= gradeDomain.Description,
                 Value = gradeDomain.Value,
                 Subject = gradeDomain.Subject.Name,
-                Student = $"{gradeDomain.Student.FirstName} {gradeDomain.Student.LastName}"
+                Student = $"{gradeDomain.Student.FirstName} {gradeDomain.Student.LastName}",
+                Professor = $"{gradeDomain.Professor.FirstName} {gradeDomain.Professor.LastName}"
             };
 
             return gradeDto;
@@ -77,11 +87,15 @@ namespace testAPI.Services
 
         public async Task<GradeDto> CreateGrade(CreateGradeDto createGradeDto)
         {
-            var student = await _dbContext.Users.Include(u => u.Role)
-                                                .FirstOrDefaultAsync(u => u.Id == createGradeDto.StudentId);
+            await _gradeLogic.IsValidSubject(createGradeDto.SubjectId);
 
-            if (student is null || student.Role.Name != RolesConstant.Student)
-                throw new Exception("Invalid StudentId or the user is not a student!");
+            await _gradeLogic.IsValidProfessor(createGradeDto.ProfessorId);
+
+            await _gradeLogic.IsValidStudent(createGradeDto.StudentId);
+
+            await _gradeLogic.ValidateStudentAndProfessorForSubject(createGradeDto.StudentId, createGradeDto.ProfessorId, createGradeDto.SubjectId);
+
+            await _gradeLogic.ValidateExistingGrade(createGradeDto.StudentId, createGradeDto.SubjectId);
 
             var gradeDomain = new Grade()
             {
@@ -90,7 +104,8 @@ namespace testAPI.Services
                 Description = createGradeDto.Description,
                 Value = createGradeDto.Value,
                 SubjectId = createGradeDto.SubjectId,
-                StudentId = createGradeDto.StudentId
+                StudentId = createGradeDto.StudentId,
+                ProfessorId = createGradeDto.ProfessorId
             };
 
             _dbContext.Grades.Add(gradeDomain);
@@ -98,8 +113,11 @@ namespace testAPI.Services
 
             // Get new created grade
             gradeDomain = await _dbContext.Grades.Include(g => g.Subject)
-                                                 .Include(g => g.Student)
-                                                 .FirstOrDefaultAsync(g => g.Id == gradeDomain.Id);
+                                                     .Include(g => g.Student)
+                                                     .ThenInclude(s => s.Role)
+                                                     .Include(g => g.Professor)
+                                                     .ThenInclude(p => p.Role)
+                                                     .FirstOrDefaultAsync(g => g.Id == gradeDomain.Id);
 
             if (gradeDomain is null)
                 throw new Exception("New created grade not found !");
@@ -113,7 +131,8 @@ namespace testAPI.Services
                 Description = gradeDomain.Description,
                 Value = gradeDomain.Value,
                 Subject = gradeDomain.Subject.Name,
-                Student = $"{gradeDomain.Student.FirstName} {gradeDomain.Student.LastName}"
+                Student = $"{gradeDomain.Student.FirstName} {gradeDomain.Student.LastName}",
+                Professor = $"{gradeDomain.Professor.FirstName} {gradeDomain.Professor.LastName}"
             };
 
             return gradeDto;
@@ -123,7 +142,10 @@ namespace testAPI.Services
         public async Task<GradeDto> UpdateGradeById(int id, UpdateGradeDto updateGradeDto)
         {
             var gradeDomain = await _dbContext.Grades.Include(g => g.Subject)
+                                                     .Include(g => g.Professor)
+                                                     .ThenInclude(p => p.Role)
                                                      .Include(g => g.Student)
+                                                     .ThenInclude(s => s.Role)
                                                      .FirstOrDefaultAsync(g => g.Id == id);
 
             if (gradeDomain is null)
@@ -139,7 +161,10 @@ namespace testAPI.Services
 
             // Get updated grade
             gradeDomain = await _dbContext.Grades.Include(g => g.Subject)
+                                                 .Include(g => g.Professor)
+                                                 .ThenInclude(p => p.Role)
                                                  .Include(g => g.Student)
+                                                 .ThenInclude(s => s.Role)
                                                  .FirstOrDefaultAsync(g => g.Id == id);
 
             if (gradeDomain is null)
@@ -154,7 +179,8 @@ namespace testAPI.Services
                 Description = gradeDomain.Description,
                 Value = gradeDomain.Value,
                 Subject = gradeDomain.Subject.Name,
-                Student = $"{gradeDomain.Student.FirstName} {gradeDomain.Student.LastName}"
+                Student = $"{gradeDomain.Student.FirstName} {gradeDomain.Student.LastName}",
+                Professor = $"{gradeDomain.Professor.FirstName} {gradeDomain.Professor.LastName}"
             };
 
             return gradeDto;
@@ -164,7 +190,10 @@ namespace testAPI.Services
         public async Task<GradeDto> DeleteGradeById(int id)
         {
             var gradeDomain = await _dbContext.Grades.Include(g => g.Subject)
+                                                     .Include (g => g.Professor)
+                                                     .ThenInclude (p => p.Role)
                                                      .Include(g => g.Student)
+                                                     .ThenInclude(s => s.Role)
                                                      .FirstOrDefaultAsync(g => g.Id == id);
 
             if (gradeDomain is null)
@@ -178,7 +207,8 @@ namespace testAPI.Services
                 Description = gradeDomain.Description,
                 Value = gradeDomain.Value,
                 Subject = gradeDomain.Subject.Name,
-                Student = $"{gradeDomain.Student.FirstName} {gradeDomain.Student.LastName}"
+                Student = $"{gradeDomain.Student.FirstName} {gradeDomain.Student.LastName}",
+                Professor = $"{gradeDomain.Professor.FirstName} {gradeDomain.Professor.LastName}"
             };
 
             _dbContext.Grades.Remove(gradeDomain);

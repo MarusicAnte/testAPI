@@ -1,28 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\webAPI\\test\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|c:\\users\\user\\desktop\\webapi\\test\\testapi\\models\\domain\\grade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|solutionrelative:testapi\\models\\domain\\grade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|c:\\users\\user\\desktop\\webapi\\test\\testapi\\models\\domain\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|solutionrelative:testapi\\models\\domain\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|c:\\users\\user\\desktop\\webapi\\test\\testapi\\models\\dto\\gradedtos\\creategradedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|solutionrelative:testapi\\models\\dto\\gradedtos\\creategradedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|c:\\users\\user\\desktop\\webapi\\test\\testapi\\services\\gradeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|solutionrelative:testapi\\services\\gradeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|c:\\users\\user\\desktop\\webapi\\test\\testapi\\query\\gradequery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|solutionrelative:testapi\\query\\gradequery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -30,73 +9,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "User.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Models\\Domain\\User.cs",
-              "RelativeDocumentMoniker": "testAPI\\Models\\Domain\\User.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Models\\Domain\\User.cs",
-              "RelativeToolTip": "testAPI\\Models\\Domain\\User.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAIBAwBUAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-14T13:42:04.526Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CreateGradeDto.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Models\\DTO\\GradeDtos\\CreateGradeDto.cs",
-              "RelativeDocumentMoniker": "testAPI\\Models\\DTO\\GradeDtos\\CreateGradeDto.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Models\\DTO\\GradeDtos\\CreateGradeDto.cs",
-              "RelativeToolTip": "testAPI\\Models\\DTO\\GradeDtos\\CreateGradeDto.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAqAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-13T14:04:55.007Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "GradeService.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Services\\GradeService.cs",
-              "RelativeDocumentMoniker": "testAPI\\Services\\GradeService.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Services\\GradeService.cs",
-              "RelativeToolTip": "testAPI\\Services\\GradeService.cs",
-              "ViewState": "AQIAAFIAAAAAAAAAAAA4wFYAAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-13T11:58:47.069Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Grade.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Models\\Domain\\Grade.cs",
-              "RelativeDocumentMoniker": "testAPI\\Models\\Domain\\Grade.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Models\\Domain\\Grade.cs",
-              "RelativeToolTip": "testAPI\\Models\\Domain\\Grade.cs",
-              "ViewState": "AQIAAAIAAAAAAAAAAAA6wAoAAAAqAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-10T12:29:51.616Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "GradeQuery.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Query\\GradeQuery.cs",
-              "RelativeDocumentMoniker": "testAPI\\Query\\GradeQuery.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Query\\GradeQuery.cs",
-              "RelativeToolTip": "testAPI\\Query\\GradeQuery.cs",
-              "ViewState": "AQIAAAMAAAAAAAAAAAASwA0AAAA/AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-13T11:43:32.071Z"
             }
           ]
         }

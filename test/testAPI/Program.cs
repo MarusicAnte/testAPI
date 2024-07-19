@@ -33,7 +33,12 @@ builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IClassroomService, ClassroomService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IGradeService, GradeService>();
+builder.Services.AddScoped<IExamService, ExamService>();
+builder.Services.AddScoped<IExamRegistrationService, ExamRegistrationService>();
 builder.Services.AddScoped<NotificationLogic>();
+builder.Services.AddScoped<GradeLogic>();
+builder.Services.AddScoped<ExamLogic>();
+builder.Services.AddScoped<ExamRegistrationLogic>();
 builder.Services.AddScoped<UserHelper>();
 
 var app = builder.Build();

@@ -19,12 +19,6 @@ namespace testAPI.Services
 
         public async Task<List<SubjectDto>> GetAllSubjects(SubjectQuery subjectQuery)
         {
-            //var subjectsDomain = await _dbContext.Subjects.Include(s => s.SubjectsUsers)
-            //                                              .ThenInclude(su => su.User)
-            //                                              .Include(s => s.DepartmentsSubjects)
-            //                                              .ThenInclude(ds => ds.Department)
-            //                                              .ToListAsync();
-
             var subjectsDomain = await subjectQuery.GetSubjectQuery(_dbContext.Subjects.Include(s => s.SubjectsUsers)
                                                                                        .ThenInclude(su => su.User)
                                                                                        .Include(s => s.DepartmentsSubjects)

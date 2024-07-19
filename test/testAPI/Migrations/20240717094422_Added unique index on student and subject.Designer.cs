@@ -12,8 +12,8 @@ using testAPI.Data;
 namespace testAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240714122618_Added Grades")]
-    partial class AddedGrades
+    [Migration("20240717094422_Added unique index on student and subject")]
+    partial class Addeduniqueindexonstudentandsubject
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,6 +96,48 @@ namespace testAPI.Migrations
                     b.ToTable("DepartmentsUsers");
                 });
 
+            modelBuilder.Entity("testAPI.Models.Domain.Exam", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClassRoomId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumberOfApplications")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProfessorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassRoomId");
+
+                    b.HasIndex("ProfessorId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("Exams");
+                });
+
             modelBuilder.Entity("testAPI.Models.Domain.Grade", b =>
                 {
                     b.Property<int>("Id")
@@ -110,6 +152,9 @@ namespace testAPI.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProfessorId")
+                        .HasColumnType("int");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
@@ -126,9 +171,11 @@ namespace testAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("ProfessorId");
 
-                    b.HasIndex("SubjectId")
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("StudentId", "SubjectId")
                         .IsUnique();
 
                     b.ToTable("Grades");
@@ -314,19 +361,54 @@ namespace testAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("testAPI.Models.Domain.Grade", b =>
+            modelBuilder.Entity("testAPI.Models.Domain.Exam", b =>
                 {
-                    b.HasOne("testAPI.Models.Domain.User", "Student")
-                        .WithMany("Grades")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("testAPI.Models.Domain.Classroom", "Classroom")
+                        .WithMany("Exams")
+                        .HasForeignKey("ClassRoomId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("testAPI.Models.Domain.User", "Professor")
+                        .WithMany("Exams")
+                        .HasForeignKey("ProfessorId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("testAPI.Models.Domain.Subject", "Subject")
-                        .WithOne("Grade")
-                        .HasForeignKey("testAPI.Models.Domain.Grade", "SubjectId")
+                        .WithMany("Exams")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Classroom");
+
+                    b.Navigation("Professor");
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("testAPI.Models.Domain.Grade", b =>
+                {
+                    b.HasOne("testAPI.Models.Domain.User", "Professor")
+                        .WithMany("ProfessorGrades")
+                        .HasForeignKey("ProfessorId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("testAPI.Models.Domain.User", "Student")
+                        .WithMany("StudentGrades")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("testAPI.Models.Domain.Subject", "Subject")
+                        .WithMany("Grades")
+                        .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Professor");
 
                     b.Navigation("Student");
 
@@ -393,6 +475,11 @@ namespace testAPI.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("testAPI.Models.Domain.Classroom", b =>
+                {
+                    b.Navigation("Exams");
+                });
+
             modelBuilder.Entity("testAPI.Models.Domain.Department", b =>
                 {
                     b.Navigation("DepartmentsSubjects");
@@ -409,8 +496,9 @@ namespace testAPI.Migrations
                 {
                     b.Navigation("DepartmentsSubjects");
 
-                    b.Navigation("Grade")
-                        .IsRequired();
+                    b.Navigation("Exams");
+
+                    b.Navigation("Grades");
 
                     b.Navigation("SubjectsNotifications");
 
@@ -421,9 +509,13 @@ namespace testAPI.Migrations
                 {
                     b.Navigation("DepartmentsUsers");
 
-                    b.Navigation("Grades");
+                    b.Navigation("Exams");
 
                     b.Navigation("Notifications");
+
+                    b.Navigation("ProfessorGrades");
+
+                    b.Navigation("StudentGrades");
 
                     b.Navigation("SubjectsUsers");
                 });

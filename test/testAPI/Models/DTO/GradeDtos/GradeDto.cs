@@ -9,5 +9,6 @@
         public int Value { get; set; }
         public string Subject { get; set; }
         public string Student { get; set; }
+        public string Professor { get; set; }
     }
 }

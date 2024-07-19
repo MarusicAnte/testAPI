@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using testAPI.Data;
 
@@ -11,9 +12,11 @@ using testAPI.Data;
 namespace testAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240717093317_Updated GradeSubject relation")]
+    partial class UpdatedGradeSubjectrelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,19 +104,15 @@ namespace testAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClassroomId")
+                    b.Property<int>("ClassRoomId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Duration")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -130,42 +129,13 @@ namespace testAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassroomId");
+                    b.HasIndex("ClassRoomId");
 
                     b.HasIndex("ProfessorId");
 
                     b.HasIndex("SubjectId");
 
                     b.ToTable("Exams");
-                });
-
-            modelBuilder.Entity("testAPI.Models.Domain.ExamRegistration", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ExamId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsRegistered")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExamId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("ExamRegistrations");
                 });
 
             modelBuilder.Entity("testAPI.Models.Domain.Grade", b =>
@@ -203,10 +173,9 @@ namespace testAPI.Migrations
 
                     b.HasIndex("ProfessorId");
 
-                    b.HasIndex("SubjectId");
+                    b.HasIndex("StudentId");
 
-                    b.HasIndex("StudentId", "SubjectId")
-                        .IsUnique();
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("Grades");
                 });
@@ -395,7 +364,7 @@ namespace testAPI.Migrations
                 {
                     b.HasOne("testAPI.Models.Domain.Classroom", "Classroom")
                         .WithMany("Exams")
-                        .HasForeignKey("ClassroomId")
+                        .HasForeignKey("ClassRoomId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -416,25 +385,6 @@ namespace testAPI.Migrations
                     b.Navigation("Professor");
 
                     b.Navigation("Subject");
-                });
-
-            modelBuilder.Entity("testAPI.Models.Domain.ExamRegistration", b =>
-                {
-                    b.HasOne("testAPI.Models.Domain.Exam", "Exam")
-                        .WithMany("ExamRegistrations")
-                        .HasForeignKey("ExamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("testAPI.Models.Domain.User", "Student")
-                        .WithMany("ExamRegistrations")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Exam");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("testAPI.Models.Domain.Grade", b =>
@@ -536,11 +486,6 @@ namespace testAPI.Migrations
                     b.Navigation("DepartmentsUsers");
                 });
 
-            modelBuilder.Entity("testAPI.Models.Domain.Exam", b =>
-                {
-                    b.Navigation("ExamRegistrations");
-                });
-
             modelBuilder.Entity("testAPI.Models.Domain.Notification", b =>
                 {
                     b.Navigation("SubjectsNotifications");
@@ -562,8 +507,6 @@ namespace testAPI.Migrations
             modelBuilder.Entity("testAPI.Models.Domain.User", b =>
                 {
                     b.Navigation("DepartmentsUsers");
-
-                    b.Navigation("ExamRegistrations");
 
                     b.Navigation("Exams");
 
