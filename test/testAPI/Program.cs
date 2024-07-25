@@ -27,6 +27,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
 
 // Register IUserService and its implementation UserService
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
@@ -35,10 +36,16 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<IExamService, ExamService>();
 builder.Services.AddScoped<IExamRegistrationService, ExamRegistrationService>();
+builder.Services.AddScoped<IActivityTypeService, ActivityTypeService>();
+builder.Services.AddScoped<ISubjectActivityService, SubjectActivityService>();
+builder.Services.AddScoped<RoleLogic>();
+builder.Services.AddScoped<SubjectLogic>();
 builder.Services.AddScoped<NotificationLogic>();
 builder.Services.AddScoped<GradeLogic>();
 builder.Services.AddScoped<ExamLogic>();
 builder.Services.AddScoped<ExamRegistrationLogic>();
+builder.Services.AddScoped<ActivityTypeLogic>();
+builder.Services.AddScoped<SubjectActivityLogic>();
 builder.Services.AddScoped<UserHelper>();
 
 var app = builder.Build();

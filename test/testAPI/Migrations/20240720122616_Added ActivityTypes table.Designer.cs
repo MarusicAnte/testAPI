@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using testAPI.Data;
 
@@ -11,9 +12,11 @@ using testAPI.Data;
 namespace testAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240720122616_Added ActivityTypes table")]
+    partial class AddedActivityTypestable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -302,39 +305,6 @@ namespace testAPI.Migrations
                     b.ToTable("Subjects");
                 });
 
-            modelBuilder.Entity("testAPI.Models.Domain.SubjectActivity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ActivityTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClassroomId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InstructorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityTypeId");
-
-                    b.HasIndex("ClassroomId");
-
-                    b.HasIndex("InstructorId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.ToTable("SubjectActivities");
-                });
-
             modelBuilder.Entity("testAPI.Models.Domain.SubjectNotificationJoin", b =>
                 {
                     b.Property<int>("SubjectId")
@@ -525,41 +495,6 @@ namespace testAPI.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("testAPI.Models.Domain.SubjectActivity", b =>
-                {
-                    b.HasOne("testAPI.Models.Domain.ActivityType", "ActivityType")
-                        .WithMany()
-                        .HasForeignKey("ActivityTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("testAPI.Models.Domain.Classroom", "Classroom")
-                        .WithMany("SubjectActivities")
-                        .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("testAPI.Models.Domain.User", "Instructor")
-                        .WithMany("SubjectActivities")
-                        .HasForeignKey("InstructorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("testAPI.Models.Domain.Subject", "Subject")
-                        .WithMany("SubjectActivities")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ActivityType");
-
-                    b.Navigation("Classroom");
-
-                    b.Navigation("Instructor");
-
-                    b.Navigation("Subject");
-                });
-
             modelBuilder.Entity("testAPI.Models.Domain.SubjectNotificationJoin", b =>
                 {
                     b.HasOne("testAPI.Models.Domain.Notification", "Notification")
@@ -612,8 +547,6 @@ namespace testAPI.Migrations
             modelBuilder.Entity("testAPI.Models.Domain.Classroom", b =>
                 {
                     b.Navigation("Exams");
-
-                    b.Navigation("SubjectActivities");
                 });
 
             modelBuilder.Entity("testAPI.Models.Domain.Department", b =>
@@ -641,8 +574,6 @@ namespace testAPI.Migrations
 
                     b.Navigation("Grades");
 
-                    b.Navigation("SubjectActivities");
-
                     b.Navigation("SubjectsNotifications");
 
                     b.Navigation("SubjectsUsers");
@@ -661,8 +592,6 @@ namespace testAPI.Migrations
                     b.Navigation("ProfessorGrades");
 
                     b.Navigation("StudentGrades");
-
-                    b.Navigation("SubjectActivities");
 
                     b.Navigation("SubjectsUsers");
                 });

@@ -36,6 +36,15 @@ namespace testAPI.Logic
 
             if (!isStudentRegisteredForExamSubject)
                 throw new Exception($"Student with id {studentId} is not registered for the subject of the exam!");
+
+
+            // Checking if exam registration for the same student already exist
+            var existingExamRegistration = await _dbContext.ExamRegistrations.Include(er => er.Student)
+                                                                             .Include(er => er.Exam)
+                                                                             .AnyAsync(x => x.StudentId == studentId && x.ExamId == examId);
+
+            if (existingExamRegistration)
+                throw new Exception($"Exam registration from studentId {studentId} for examId {examId} already exist !");
         }
     }
 }

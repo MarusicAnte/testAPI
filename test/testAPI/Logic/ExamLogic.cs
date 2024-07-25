@@ -62,9 +62,9 @@ namespace testAPI.Logic
 
         public async Task ValidateExistingExam(int professorId, int subjectId)
         {
-            var existingExam = await _dbContext.Exams.FirstOrDefaultAsync(x => x.ProfessorId == professorId && x.SubjectId == subjectId);
+            var existingExam = await _dbContext.Exams.AnyAsync(x => x.ProfessorId == professorId && x.SubjectId == subjectId);
 
-            if (existingExam is not null)
+            if (existingExam)
                 throw new Exception($"Exam created by ProfessorId {professorId} for SubjectId {subjectId} already exists !");
         }
     }

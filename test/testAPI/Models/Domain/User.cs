@@ -19,6 +19,7 @@
         public ICollection<Grade> ProfessorGrades { get; set; }
         public ICollection<Exam> Exams { get; set; }
         public ICollection<ExamRegistration> ExamRegistrations { get; set; }
+        public ICollection<SubjectActivity> SubjectActivities { get; set; }
         #endregion
     }
 }

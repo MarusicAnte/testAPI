@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using testAPI.Data;
 using testAPI.Interfaces;
+using testAPI.Logic;
 using testAPI.Models.Domain;
 using testAPI.Models.DTO.SubjectDtos;
 using testAPI.Query;
@@ -10,10 +11,12 @@ namespace testAPI.Services
     public class SubjectService : ISubjectService
     {
         private readonly ApplicationDBContext _dbContext;
+        private readonly SubjectLogic _subjectLogic;
 
-        public SubjectService(ApplicationDBContext dbContext)
+        public SubjectService(ApplicationDBContext dbContext, SubjectLogic subjectLogic)
         {
             _dbContext = dbContext;
+            _subjectLogic = subjectLogic;
         }
 
 
@@ -117,6 +120,10 @@ namespace testAPI.Services
 
         public async Task<SubjectDto> CreateSubject(CreateSubjectDto createSubjectDto)
         {
+            await _subjectLogic.ValidateExistingSubject(createSubjectDto.Name, 
+                                                        createSubjectDto.Semester, 
+                                                        createSubjectDto.ECTS);
+
             var subjectDomain = new Subject
             {
                 Name= createSubjectDto.Name,
@@ -183,6 +190,10 @@ namespace testAPI.Services
             subjectDomain.Semester = updateSubjectDto.Semester;
             subjectDomain.ECTS = updateSubjectDto.ECTS;
             subjectDomain.Description = updateSubjectDto.Description;
+
+            await _subjectLogic.ValidateUsersForSubject(id, updateSubjectDto.UsersIds);
+            await _subjectLogic.ValidateDepartmentsForSubject(id, updateSubjectDto.DepartmentsIds);
+
             subjectDomain.SubjectsUsers = await GetUsersForSubject(updateSubjectDto.UsersIds);
             subjectDomain.DepartmentsSubjects = await GetDepartmentsForSubject(updateSubjectDto.DepartmentsIds);
 

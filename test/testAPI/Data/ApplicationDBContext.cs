@@ -20,6 +20,8 @@ namespace testAPI.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Grade> Grades { get; set; }
         public DbSet<Exam> Exams { get; set; }
+        public DbSet<ActivityType> ActivityTypes { get; set; }
+        public DbSet<SubjectActivity> SubjectActivities { get; set; }
         public DbSet<ExamRegistration> ExamRegistrations { get; set; }
         public DbSet<SubjectUserJoin> SubjectsUsers { get; set; }
         public DbSet<DepartmentUserJoin> DepartmentsUsers { get; set; }
@@ -168,6 +170,31 @@ namespace testAPI.Data
 
             modelBuilder.Entity<ExamRegistration>()
                 .HasIndex(er => er.ExamId);
+
+
+            // SubjectActivities
+            modelBuilder.Entity<SubjectActivity>()
+                .HasKey(sa => sa.Id);
+
+            modelBuilder.Entity<SubjectActivity>()
+                .HasOne(sa => sa.Subject)
+                .WithMany(s => s.SubjectActivities)
+                .HasForeignKey(sa => sa.SubjectId);
+
+            modelBuilder.Entity<SubjectActivity>()
+                .HasOne(sa => sa.ActivityType)
+                .WithMany()
+                .HasForeignKey(sa => sa.ActivityTypeId);
+
+            modelBuilder.Entity<SubjectActivity>()
+                .HasOne(sa => sa.Classroom)
+                .WithMany(c => c.SubjectActivities)
+                .HasForeignKey(sa => sa.ClassroomId);
+
+            modelBuilder.Entity<SubjectActivity>()
+                .HasOne(sa => sa.Instructor)
+                .WithMany(i => i.SubjectActivities)
+                .HasForeignKey(sa => sa.InstructorId);
         }
 
     }
