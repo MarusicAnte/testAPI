@@ -35,22 +35,17 @@ namespace testAPI.Services
             if (gradesDomain is null || gradesDomain.Count == 0)
                 throw new Exception($"Grades does not exist !");
 
-            var gradeDto = new List<GradeDto>();
-            foreach (var gradeDomain in gradesDomain)
+            // Map Domains to DTOs
+            return gradesDomain.Select(gradeDomain => new GradeDto()
             {
-                gradeDto.Add(new GradeDto
-                {
-                    Id = gradeDomain.Id,
-                    Title = gradeDomain.Title,
-                    Description = gradeDomain.Description,
-                    Value = gradeDomain.Value,
-                    Subject = gradeDomain.Subject.Name,
-                    Student = $"{gradeDomain.Student.FirstName} {gradeDomain.Student.LastName}",
-                    Professor = $"{gradeDomain.Professor.FirstName} {gradeDomain.Professor.LastName}"
-                });
-            }
-
-            return gradeDto;
+                Id = gradeDomain.Id,
+                Title = gradeDomain.Title,
+                Description = gradeDomain.Description,
+                Value = gradeDomain.Value,
+                Subject = gradeDomain.Subject.Name,
+                Student = $"{gradeDomain.Student.FirstName} {gradeDomain.Student.LastName}",
+                Professor = $"{gradeDomain.Professor.FirstName} {gradeDomain.Professor.LastName}"
+            }).ToList();
         }
 
 

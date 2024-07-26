@@ -24,19 +24,13 @@ namespace testAPI.Services
             if (classroomsDomain is null || classroomsDomain.Count == 0)
                 throw new Exception("Classrooms does not exist !");
 
-            // Convert Domain to DTO
-            var classroomDto = new List<ClassroomDto>();
-            foreach (var classroomDomain in classroomsDomain)
+            // Map Domains to DTOs
+            return classroomsDomain.Select(classroomDomain => new ClassroomDto()
             {
-                classroomDto.Add(new ClassroomDto()
-                {
-                    Id = classroomDomain.Id,
-                    Name = classroomDomain.Name,
-                    Capacity = classroomDomain.Capacity,
-                });
-            }
-
-            return classroomDto;
+                Id = classroomDomain.Id,
+                Name = classroomDomain.Name,
+                Capacity = classroomDomain.Capacity
+            }).ToList();
         }
 
 

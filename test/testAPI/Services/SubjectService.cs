@@ -32,41 +32,35 @@ namespace testAPI.Services
             if (subjectsDomain is null)
                 throw new Exception("Subjects does not exist !");
 
-            var subjectsDto = new List<SubjectDto>();
-            foreach (var subjectDomain in subjectsDomain)
+            return subjectsDomain.Select(subjectDomain => new SubjectDto()
             {
-                subjectsDto.Add(new SubjectDto()
+                Id = subjectDomain.Id,
+                Name = subjectDomain.Name,
+                Semester = subjectDomain.Semester,
+                ECTS = subjectDomain.ECTS,
+                Description = subjectDomain.Description,
+                Users = subjectDomain.SubjectsUsers.Select(su => new SubjectUsersDto
                 {
-                    Id = subjectDomain.Id,
-                    Name = subjectDomain.Name,
-                    Semester = subjectDomain.Semester,
-                    ECTS = subjectDomain.ECTS,
-                    Description = subjectDomain.Description,
-                    Users = subjectDomain.SubjectsUsers.Select(su => new SubjectUsersDto
-                    {
-                        Id = su.User.Id,
-                        FirstName = su.User.FirstName,
-                        LastName = su.User.LastName,
-                        Email = su.User.Email,
-                        RoleId = su.User.RoleId
-                    }).ToList(),
-                    Departments = subjectDomain.DepartmentsSubjects.Select(ds => new SubjectDepartmentsDto
-                    {
-                        Id = ds.Department.Id,
-                        Name = ds.Department.Name
-                    }).ToList(),
-                    Notifications = subjectDomain.SubjectsNotifications.Select(sn => new SubjectNotificationsDto
-                    {
-                        Id = sn.Notification.Id,
-                        CreatedTime = sn.Notification.CreatedTime,
-                        Title = sn.Notification.Title,
-                        Description = sn.Notification.Description,
-                        SenderId = sn.Notification.SenderId,
-                    }).ToList()
-                });
-            }
-
-            return subjectsDto;
+                    Id = su.User.Id,
+                    FirstName = su.User.FirstName,
+                    LastName = su.User.LastName,
+                    Email = su.User.Email,
+                    RoleId = su.User.RoleId
+                }).ToList(),
+                Departments = subjectDomain.DepartmentsSubjects.Select(ds => new SubjectDepartmentsDto
+                {
+                    Id = ds.Department.Id,
+                    Name = ds.Department.Name
+                }).ToList(),
+                Notifications = subjectDomain.SubjectsNotifications.Select(sn => new SubjectNotificationsDto
+                {
+                    Id = sn.Notification.Id,
+                    CreatedTime = sn.Notification.CreatedTime,
+                    Title = sn.Notification.Title,
+                    Description = sn.Notification.Description,
+                    SenderId = sn.Notification.SenderId,
+                }).ToList()
+            }).ToList();
         }
 
 

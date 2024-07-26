@@ -27,17 +27,11 @@ namespace testAPI.Services
 
             
             // Map Domains to DTOs
-            var activityTypesDto = new List<ActivityTypeDto>();
-            foreach (var activityTypeDomain in activityTypesDomain)
+            return activityTypesDomain.Select(activityTypeDomain => new ActivityTypeDto()
             {
-                activityTypesDto.Add(new ActivityTypeDto
-                {
-                    Id = activityTypeDomain.Id,
-                    Name = activityTypeDomain.Name,
-                });
-            }
-
-            return activityTypesDto;
+                Id = activityTypeDomain.Id,
+                Name = activityTypeDomain.Name,
+            }).ToList();
         }
 
 

@@ -3,24 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\webAPI\\test\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|c:\\users\\user\\desktop\\webapi\\test\\testapi\\logic\\subjectactivitylogic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|solutionrelative:testapi\\logic\\subjectactivitylogic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|c:\\users\\user\\desktop\\webapi\\test\\testapi\\controllers\\subjectactivitiescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|solutionrelative:testapi\\controllers\\subjectactivitiescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|c:\\users\\user\\desktop\\webapi\\test\\testapi\\services\\subjectactivityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|solutionrelative:testapi\\services\\subjectactivityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|c:\\users\\user\\desktop\\webapi\\test\\testapi\\interfaces\\isubjectactivityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|solutionrelative:testapi\\interfaces\\isubjectactivityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|c:\\users\\user\\desktop\\webapi\\test\\testapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|solutionrelative:testapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|c:\\users\\user\\desktop\\webapi\\test\\testapi\\services\\activitytypeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{68D26CC5-9B91-47E5-A8CD-73957728CE14}|testAPI\\testAPI.csproj|solutionrelative:testapi\\services\\activitytypeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,67 +22,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Program.cs",
-              "RelativeDocumentMoniker": "testAPI\\Program.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Program.cs",
-              "RelativeToolTip": "testAPI\\Program.cs",
-              "ViewState": "AQIAAB4AAAAAAAAAAAAAAC8AAAAzAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-25T11:08:20.101Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "SubjectActivityLogic.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Logic\\SubjectActivityLogic.cs",
-              "RelativeDocumentMoniker": "testAPI\\Logic\\SubjectActivityLogic.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Logic\\SubjectActivityLogic.cs",
-              "RelativeToolTip": "testAPI\\Logic\\SubjectActivityLogic.cs",
-              "ViewState": "AQIAACQAAAAAAAAAAAAzwDMAAABjAAAA",
+              "Title": "ActivityTypeService.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Services\\ActivityTypeService.cs",
+              "RelativeDocumentMoniker": "testAPI\\Services\\ActivityTypeService.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Services\\ActivityTypeService.cs",
+              "RelativeToolTip": "testAPI\\Services\\ActivityTypeService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACQAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-25T10:56:32.94Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ISubjectActivityService.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Interfaces\\ISubjectActivityService.cs",
-              "RelativeDocumentMoniker": "testAPI\\Interfaces\\ISubjectActivityService.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Interfaces\\ISubjectActivityService.cs",
-              "RelativeToolTip": "testAPI\\Interfaces\\ISubjectActivityService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAABKAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-25T10:17:09.225Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SubjectActivitiesController.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Controllers\\SubjectActivitiesController.cs",
-              "RelativeDocumentMoniker": "testAPI\\Controllers\\SubjectActivitiesController.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Controllers\\SubjectActivitiesController.cs",
-              "RelativeToolTip": "testAPI\\Controllers\\SubjectActivitiesController.cs",
-              "ViewState": "AQIAACIAAAAAAAAAAAAgwDIAAABPAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-24T13:29:46.021Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "SubjectActivityService.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Services\\SubjectActivityService.cs",
-              "RelativeDocumentMoniker": "testAPI\\Services\\SubjectActivityService.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\webAPI\\test\\testAPI\\Services\\SubjectActivityService.cs",
-              "RelativeToolTip": "testAPI\\Services\\SubjectActivityService.cs",
-              "ViewState": "AQIAABMAAAAAAAAAAAA2wFMAAABvAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-24T13:14:00.245Z",
+              "WhenOpened": "2024-07-26T09:06:02.24Z",
               "EditorCaption": ""
             }
           ]

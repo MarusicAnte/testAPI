@@ -28,20 +28,15 @@ namespace testAPI.Services
             if (examRegistrationsDomain is null || examRegistrationsDomain.Count == 0)
                 throw new Exception("Exam registrations does not exist !");
 
-            var examRegistrationDto = new List<ExamRegistrationDto>();
-            foreach (var examRegistrationDomain in examRegistrationsDomain)
+            // Map Domains to DTOs
+            return examRegistrationsDomain.Select(examRegistrationDomain => new ExamRegistrationDto()
             {
-                examRegistrationDto.Add(new ExamRegistrationDto
-                {
-                    Id = examRegistrationDomain.Id,
-                    Date = examRegistrationDomain.Date,
-                    IsRegistered = examRegistrationDomain.IsRegistered,
-                    Student = $"{examRegistrationDomain.Student.FirstName} {examRegistrationDomain.Student.LastName}",
-                    Exam = examRegistrationDomain.Exam.Name
-                });
-            }
-
-            return examRegistrationDto;
+                Id = examRegistrationDomain.Id,
+                Date = examRegistrationDomain.Date,
+                IsRegistered = examRegistrationDomain.IsRegistered,
+                Student = $"{examRegistrationDomain.Student.FirstName} {examRegistrationDomain.Student.LastName}",
+                Exam = examRegistrationDomain.Exam.Name
+            }).ToList();
         }
 
 

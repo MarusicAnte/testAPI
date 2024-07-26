@@ -31,20 +31,14 @@ namespace testAPI.Services
                 throw new Exception("Subject Activities does not exist !");
 
             // Map Domains to DTOs
-            var subjectActivityDto = new List<SubjectActivityDto>();
-            foreach (var subjectActivityDomain in subjectActivitiesDomain)
+            return subjectActivitiesDomain.Select(subjectActivityDomain => new SubjectActivityDto()
             {
-                subjectActivityDto.Add(new SubjectActivityDto
-                {
-                    Id = subjectActivityDomain.Id,
-                    Subject = subjectActivityDomain.Subject.Name,
-                    ActivityType = subjectActivityDomain.ActivityType.Name,
-                    Classroom = subjectActivityDomain.Classroom.Name,
-                    Instructor = $"{subjectActivityDomain.Instructor.FirstName} {subjectActivityDomain.Instructor.LastName}"
-                });
-            }
-
-            return subjectActivityDto;
+                Id = subjectActivityDomain.Id,
+                Subject = subjectActivityDomain.Subject.Name,
+                ActivityType = subjectActivityDomain.ActivityType.Name,
+                Classroom = subjectActivityDomain.Classroom.Name,
+                Instructor = $"{subjectActivityDomain.Instructor.FirstName} {subjectActivityDomain.Instructor.LastName}"
+            }).ToList();
         }
 
 

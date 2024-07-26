@@ -32,26 +32,20 @@ namespace testAPI.Services
                 throw new Exception("Notifications does not exist !");
            
            // Map Domains to DTOs 
-           var notificationDto = new List<NotificationDto>();
-           foreach (var notificationDomain in notificationsDomain)
+           return notificationsDomain.Select(notificationDomain => new NotificationDto()
            {
-                notificationDto.Add(new NotificationDto
-                {
-                    Id = notificationDomain.Id,
-                    CreatedTime = notificationDomain.CreatedTime,
-                    Title = notificationDomain.Title,
-                    Description = notificationDomain.Description,
-                    SenderId = notificationDomain.SenderId,
-                    Subjects = notificationDomain.SubjectsNotifications.Select(s => new NotificationSubjectsDto
-                    {
-                        Id = s.Subject.Id,
-                        Name = s.Subject.Name,
-                        Semester = s.Subject.Semester
-                    }).ToList()
-                });
-           }
-
-           return notificationDto;
+               Id = notificationDomain.Id,
+               CreatedTime = notificationDomain.CreatedTime,
+               Title = notificationDomain.Title,
+               Description = notificationDomain.Description,
+               SenderId = notificationDomain.SenderId,
+               Subjects = notificationDomain.SubjectsNotifications.Select(s => new NotificationSubjectsDto
+               {
+                   Id = s.Subject.Id,
+                   Name = s.Subject.Name,
+                   Semester = s.Subject.Semester
+               }).ToList()
+           }).ToList();
         }
 
 

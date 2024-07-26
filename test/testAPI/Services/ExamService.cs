@@ -31,24 +31,18 @@ namespace testAPI.Services
                 throw new Exception("Exams does not exist !");
 
             // Map Domains to DTOs
-            var examDto = new List<ExamDto>();
-            foreach (var examDomain in examsDomain)
+            return examsDomain.Select(examDomain => new ExamDto()
             {
-                examDto.Add(new ExamDto
-                {
-                    Id = examDomain.Id,
-                    Name = examDomain.Name,
-                    Description = examDomain.Description,
-                    Duration = $"{examDomain.Duration} min",
-                    NumberOfApplications = examDomain.NumberOfApplications,
-                    Classroom = examDomain.Classroom.Name,
-                    Subject = examDomain.Subject.Name,
-                    Professor = $"{examDomain.Professor.FirstName} {examDomain.Professor.LastName}",
-                    Date = examDomain.Date
-                });
-            }
-
-            return examDto;
+                Id = examDomain.Id,
+                Name = examDomain.Name,
+                Description = examDomain.Description,
+                Duration = $"{examDomain.Duration} min",
+                NumberOfApplications = examDomain.NumberOfApplications,
+                Classroom = examDomain.Classroom.Name,
+                Subject = examDomain.Subject.Name,
+                Professor = $"{examDomain.Professor.FirstName} {examDomain.Professor.LastName}",
+                Date = examDomain.Date
+            }).ToList();
         }
 
 

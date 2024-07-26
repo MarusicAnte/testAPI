@@ -18,12 +18,6 @@ namespace testAPI.Services
 
         public async Task<List<UserDto>> GetAllUsers(UserQuery userQuery)
         {
-            //var usersDomain = await _dbContext.Users.Include(u => u.SubjectsUsers)
-            //                                        .ThenInclude(su => su.Subject)
-            //                                        .Include(u => u.DepartmentsUsers)
-            //                                        .ThenInclude(du => du.Department)
-            //                                        .ToListAsync();
-
             var usersDomain = await userQuery.GetUserQuery(_dbContext.Users.Include(u => u.Role)
                                                                            .Include(u => u.SubjectsUsers)
                                                                            .ThenInclude(su => su.Subject)
@@ -34,35 +28,30 @@ namespace testAPI.Services
             if (usersDomain is null)
                 throw new Exception("Users do not exist!");
 
-            var usersDto = new List<UserDto>();
-            foreach (var user in usersDomain)
+            return usersDomain.Select(userDomain => new UserDto()
             {
-                usersDto.Add(new UserDto()
+                Id = userDomain.Id,
+                FirstName = userDomain.FirstName,
+                LastName = userDomain.LastName,
+                Email = userDomain.Email,
+                Password = userDomain.Password,
+                ImageURL = userDomain.ImageURL,
+                RoleId = userDomain.RoleId,
+                Subjects = userDomain.SubjectsUsers.Select(su => new UserSubjectDto
                 {
-                    Id = user.Id,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    Password = user.Password,
-                    ImageURL = user.ImageURL,
-                    RoleId = user.RoleId,
-                    Subjects = user.SubjectsUsers.Select(su => new UserSubjectDto
-                    {
-                        Id = su.Subject.Id,
-                        Name = su.Subject.Name,
-                        Semester = su.Subject.Semester,
-                        ECTS = su.Subject.ECTS,
-                        Description = su.Subject.Description
-                    }).ToList(),
-                    Departments = user.DepartmentsUsers.Select(du => new UserDepartmentsDto
-                    {
-                        Id = du.Department.Id,
-                        Name = du.Department.Name
-                    }).ToList()
-                });
-            }
+                    Id = su.Subject.Id,
+                    Name = su.Subject.Name,
+                    Semester = su.Subject.Semester,
+                    ECTS = su.Subject.ECTS,
+                    Description = su.Subject.Description
+                }).ToList(),
+                Departments = userDomain.DepartmentsUsers.Select(du => new UserDepartmentsDto
+                {
+                    Id = du.Department.Id,
+                    Name = du.Department.Name
+                }).ToList()
 
-            return usersDto;
+            }).ToList();
         }
 
 

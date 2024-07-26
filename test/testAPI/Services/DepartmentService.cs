@@ -28,33 +28,27 @@ namespace testAPI.Services
                 throw new Exception("College departments does not exist !");
 
             // Map Domain to DTO
-            var departmentsDto = new List<DepartmentDto>();
-            foreach (var departmentDomain in departmentsDomain)
+            return departmentsDomain.Select(departmentDomain => new DepartmentDto()
             {
-                departmentsDto.Add(new DepartmentDto()
+                Id = departmentDomain.Id,
+                Name = departmentDomain.Name,
+                Description = departmentDomain.Description,
+                Users = departmentDomain.DepartmentsUsers.Select(u => new DepartmentUsersDto()
                 {
-                    Id = departmentDomain.Id,
-                    Name = departmentDomain.Name,
-                    Description = departmentDomain.Description,
-                    Users = departmentDomain.DepartmentsUsers.Select(u => new DepartmentUsersDto()
-                    {
-                        Id = u.User.Id,
-                        FirstName = u.User.FirstName,
-                        LastName = u.User.LastName,
-                        Email = u.User.Email,
-                        RoleId = u.User.RoleId
-                    }).ToList(),
-                    Subjects = departmentDomain.DepartmentsSubjects.Select(s => new DepartmentSubjectsDto()
-                    {
-                        Id = s.Subject.Id,
-                        Name = s.Subject.Name,
-                        Semester = s.Subject.Semester,
-                        ECTS = s.Subject.ECTS
-                    }).ToList()
-                });
-            }
-
-            return departmentsDto;
+                    Id = u.User.Id,
+                    FirstName = u.User.FirstName,
+                    LastName = u.User.LastName,
+                    Email = u.User.Email,
+                    RoleId = u.User.RoleId
+                }).ToList(),
+                Subjects = departmentDomain.DepartmentsSubjects.Select(s => new DepartmentSubjectsDto()
+                {
+                    Id = s.Subject.Id,
+                    Name = s.Subject.Name,
+                    Semester = s.Subject.Semester,
+                    ECTS = s.Subject.ECTS
+                }).ToList()
+            }).ToList();
         }
 
 

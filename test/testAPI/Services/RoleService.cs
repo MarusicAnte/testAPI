@@ -26,17 +26,11 @@ namespace testAPI.Services
                 throw new Exception("Roles does not exist !");
 
             // Map Domain to DTO
-            var rolesDto = new List<RoleDto>();
-            foreach (var roleDomain in rolesDomain)
-            {
-                rolesDto.Add(new RoleDto
-                {
-                    Id = roleDomain.Id,
-                    Name = roleDomain.Name,
-                });
-            }
-
-            return rolesDto;
+            return rolesDomain.Select(roleDomain => new RoleDto()
+            { 
+                Id = roleDomain.Id,
+                Name = roleDomain.Name,
+            }).ToList();
         }
 
 
