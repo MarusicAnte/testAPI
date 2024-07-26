@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using testAPI.Interfaces;
 using testAPI.Models.DTO.SubjectActivityDtos;
+using testAPI.Query;
 
 namespace testAPI.Controllers
 {
@@ -18,9 +19,9 @@ namespace testAPI.Controllers
 
 
         [HttpGet]
-        public async Task<List<SubjectActivityDto>> GetAll()
+        public async Task<List<SubjectActivityDto>> GetAll([FromQuery] SubjectActivityQuery subjectActivityQuery)
         {
-            return await _subjectActivityService.GetAllSubjectActivities();
+            return await _subjectActivityService.GetAllSubjectActivities(subjectActivityQuery);
         }
 
 

@@ -22,6 +22,7 @@ namespace testAPI.Data
         public DbSet<Exam> Exams { get; set; }
         public DbSet<ActivityType> ActivityTypes { get; set; }
         public DbSet<SubjectActivity> SubjectActivities { get; set; }
+        public DbSet<StudentAttendance> StudentAttendances { get; set; }
         public DbSet<ExamRegistration> ExamRegistrations { get; set; }
         public DbSet<SubjectUserJoin> SubjectsUsers { get; set; }
         public DbSet<DepartmentUserJoin> DepartmentsUsers { get; set; }
@@ -195,6 +196,21 @@ namespace testAPI.Data
                 .HasOne(sa => sa.Instructor)
                 .WithMany(i => i.SubjectActivities)
                 .HasForeignKey(sa => sa.InstructorId);
+
+
+            // StudentAttendances
+            modelBuilder.Entity<StudentAttendance>()
+                .HasKey(sa => sa.Id);
+
+            modelBuilder.Entity<StudentAttendance>()
+                .HasOne(st => st.Student)
+                .WithMany(s => s.StudentAttendances)
+                .HasForeignKey(st => st.StudentId);
+
+            modelBuilder.Entity<StudentAttendance>()
+                .HasOne(st => st.SubjectActivity)
+                .WithMany(sa => sa.StudentAttendances)
+                .HasForeignKey(st => st.SubjectActivityId);
         }
 
     }

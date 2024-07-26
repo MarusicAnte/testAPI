@@ -5,6 +5,7 @@ using testAPI.Interfaces;
 using testAPI.Logic;
 using testAPI.Models.Domain;
 using testAPI.Models.DTO.SubjectActivityDtos;
+using testAPI.Query;
 
 namespace testAPI.Services
 {
@@ -19,13 +20,13 @@ namespace testAPI.Services
         }
 
 
-        public async Task<List<SubjectActivityDto>> GetAllSubjectActivities()
+        public async Task<List<SubjectActivityDto>> GetAllSubjectActivities(SubjectActivityQuery subjectActivityQuery)
         {
-            var subjectActivitiesDomain = await _dbContext.SubjectActivities.Include(sa => sa.Subject)
-                                                                            .Include(sa => sa.ActivityType)
-                                                                            .Include(sa => sa.Classroom)
-                                                                            .Include(sa => sa.Instructor)
-                                                                            .ToListAsync();
+            var subjectActivitiesDomain = await subjectActivityQuery.GetSubjectActivityQuery(_dbContext.SubjectActivities.Include(sa => sa.Subject)
+                                                                                                                         .Include(sa => sa.ActivityType)
+                                                                                                                         .Include(sa => sa.Classroom)
+                                                                                                                         .Include(sa => sa.Instructor)
+                                                                                            ).ToListAsync();
 
             if (subjectActivitiesDomain is null || subjectActivitiesDomain.Count == 0)
                 throw new Exception("Subject Activities does not exist !");
@@ -127,6 +128,15 @@ namespace testAPI.Services
             subjectActivityDomain.ActivityTypeId = updateSubjectActivityDto.ActivityTypeId;
             subjectActivityDomain.ClassroomId = updateSubjectActivityDto.ClassroomId;
             subjectActivityDomain.InstructorId = updateSubjectActivityDto.InstructorId;
+
+            await _subjectActivityLogic.ValidateInstructorAndSubject(updateSubjectActivityDto.InstructorId, 
+                                                                     updateSubjectActivityDto.SubjectId);
+
+            await _subjectActivityLogic.ValidateActivityType(updateSubjectActivityDto.ActivityTypeId);
+
+            await _subjectActivityLogic.ValidateExistingSubjectActivity(updateSubjectActivityDto.SubjectId,
+                                                                        updateSubjectActivityDto.ActivityTypeId,
+                                                                        updateSubjectActivityDto.InstructorId);
 
             _dbContext.SubjectActivities.Update(subjectActivityDomain);
             await _dbContext.SaveChangesAsync();

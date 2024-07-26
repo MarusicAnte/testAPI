@@ -14,6 +14,7 @@
         public ActivityType ActivityType { get; set; }
         public Classroom Classroom { get; set; }
         public User Instructor { get; set; }
+        public ICollection<StudentAttendance> StudentAttendances { get; set; }
         #endregion
     }
 }

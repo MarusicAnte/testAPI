@@ -20,6 +20,7 @@
         public ICollection<Exam> Exams { get; set; }
         public ICollection<ExamRegistration> ExamRegistrations { get; set; }
         public ICollection<SubjectActivity> SubjectActivities { get; set; }
+        public ICollection<StudentAttendance> StudentAttendances { get; set; }
         #endregion
     }
 }
