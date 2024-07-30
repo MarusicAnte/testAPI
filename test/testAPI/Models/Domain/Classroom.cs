@@ -9,7 +9,7 @@
 
         #region Relations
         public ICollection<Exam> Exams { get; set; }
-        public ICollection<SubjectActivity> SubjectActivities { get; set; }
+        public ICollection<Schedule> Schedules { get; set; }
         #endregion
     }
 }

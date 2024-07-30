@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace testAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedSubjectActivities : Migration
+    public partial class AddedSubjectActivitiesandStudentAttendancestables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +19,6 @@ namespace testAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
                     ActivityTypeId = table.Column<int>(type: "int", nullable: false),
-                    ClassroomId = table.Column<int>(type: "int", nullable: false),
                     InstructorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -28,12 +28,6 @@ namespace testAPI.Migrations
                         name: "FK_SubjectActivities_ActivityTypes_ActivityTypeId",
                         column: x => x.ActivityTypeId,
                         principalTable: "ActivityTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SubjectActivities_Classrooms_ClassroomId",
-                        column: x => x.ClassroomId,
-                        principalTable: "Classrooms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -50,15 +44,48 @@ namespace testAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "StudentAttendances",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AttendanceDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    SubjectActivityId = table.Column<int>(type: "int", nullable: false),
+                    IsPresent = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentAttendances", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StudentAttendances_SubjectActivities_SubjectActivityId",
+                        column: x => x.SubjectActivityId,
+                        principalTable: "SubjectActivities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentAttendances_Users_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentAttendances_StudentId",
+                table: "StudentAttendances",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentAttendances_SubjectActivityId",
+                table: "StudentAttendances",
+                column: "SubjectActivityId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_SubjectActivities_ActivityTypeId",
                 table: "SubjectActivities",
                 column: "ActivityTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SubjectActivities_ClassroomId",
-                table: "SubjectActivities",
-                column: "ClassroomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SubjectActivities_InstructorId",
@@ -74,6 +101,9 @@ namespace testAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "StudentAttendances");
+
             migrationBuilder.DropTable(
                 name: "SubjectActivities");
         }

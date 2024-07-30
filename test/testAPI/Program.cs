@@ -38,6 +38,7 @@ builder.Services.AddScoped<IExamService, ExamService>();
 builder.Services.AddScoped<IExamRegistrationService, ExamRegistrationService>();
 builder.Services.AddScoped<IActivityTypeService, ActivityTypeService>();
 builder.Services.AddScoped<ISubjectActivityService, SubjectActivityService>();
+builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IStudentAttendanceService, StudentAttendanceService>();
 builder.Services.AddScoped<RoleLogic>();
 builder.Services.AddScoped<SubjectLogic>();
@@ -47,6 +48,7 @@ builder.Services.AddScoped<ExamLogic>();
 builder.Services.AddScoped<ExamRegistrationLogic>();
 builder.Services.AddScoped<ActivityTypeLogic>();
 builder.Services.AddScoped<SubjectActivityLogic>();
+builder.Services.AddScoped<ScheduleLogic>();
 builder.Services.AddScoped<StudentAttendanceLogic>();
 builder.Services.AddScoped<UserHelper>();
 

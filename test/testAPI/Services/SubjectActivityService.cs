@@ -19,12 +19,10 @@ namespace testAPI.Services
             _subjectActivityLogic = subjectActivityLogic;
         }
 
-
         public async Task<List<SubjectActivityDto>> GetAllSubjectActivities(SubjectActivityQuery subjectActivityQuery)
         {
             var subjectActivitiesDomain = await subjectActivityQuery.GetSubjectActivityQuery(_dbContext.SubjectActivities.Include(sa => sa.Subject)
                                                                                                                          .Include(sa => sa.ActivityType)
-                                                                                                                         .Include(sa => sa.Classroom)
                                                                                                                          .Include(sa => sa.Instructor)
                                                                                             ).ToListAsync();
 
@@ -37,7 +35,6 @@ namespace testAPI.Services
                 Id = subjectActivityDomain.Id,
                 Subject = subjectActivityDomain.Subject.Name,
                 ActivityType = subjectActivityDomain.ActivityType.Name,
-                Classroom = subjectActivityDomain.Classroom.Name,
                 Instructor = $"{subjectActivityDomain.Instructor.FirstName} {subjectActivityDomain.Instructor.LastName}"
             }).ToList();
         }
@@ -47,7 +44,6 @@ namespace testAPI.Services
         {
             var subjectActivityDomain = await _dbContext.SubjectActivities.Include(sa => sa.Subject)
                                                                           .Include(sa => sa.ActivityType)
-                                                                          .Include(sa => sa.Classroom)
                                                                           .Include(sa => sa.Instructor)
                                                                           .FirstOrDefaultAsync(x => x.Id == id);
 
@@ -58,8 +54,7 @@ namespace testAPI.Services
             {
                 Id = subjectActivityDomain.Id,
                 Subject = subjectActivityDomain.Subject.Name,
-                ActivityType= subjectActivityDomain.ActivityType.Name,
-                Classroom = subjectActivityDomain.Classroom.Name,
+                ActivityType = subjectActivityDomain.ActivityType.Name,
                 Instructor = $"{subjectActivityDomain.Instructor.FirstName} {subjectActivityDomain.Instructor.LastName}"
             };
 
@@ -82,22 +77,20 @@ namespace testAPI.Services
             {
                 SubjectId = createSubjectActivityDto.SubjectId,
                 ActivityTypeId = createSubjectActivityDto.ActivityTypeId,
-                ClassroomId = createSubjectActivityDto.ClassroomId,
                 InstructorId = createSubjectActivityDto.InstructorId,
             };
 
             _dbContext.SubjectActivities.Add(subjectActivityDomain);
             await _dbContext.SaveChangesAsync();
 
-            // Get new created SubjectActivity
+            // Get new created Subject Activity
             subjectActivityDomain = await _dbContext.SubjectActivities.Include(sa => sa.Subject)
                                                                       .Include(sa => sa.ActivityType)
-                                                                      .Include(sa => sa.Classroom)
                                                                       .Include(sa => sa.Instructor)
-                                                                      .FirstOrDefaultAsync(x => x.Id == subjectActivityDomain.Id);
+                                                                      .FirstOrDefaultAsync(sa => sa.Id == subjectActivityDomain.Id);
 
-            if (subjectActivityDomain is null)
-                throw new Exception("New created Subject Activity not found !");
+            if (subjectActivityDomain == null)
+                throw new Exception("New created Subject Activity not found!");
 
             // Map Domain to DTO
             var subjectActivityDto = new SubjectActivityDto
@@ -105,7 +98,6 @@ namespace testAPI.Services
                 Id = subjectActivityDomain.Id,
                 Subject = subjectActivityDomain.Subject.Name,
                 ActivityType = subjectActivityDomain.ActivityType.Name,
-                Classroom = subjectActivityDomain.Classroom.Name,
                 Instructor = $"{subjectActivityDomain.Instructor.FirstName} {subjectActivityDomain.Instructor.LastName}"
             };
 
@@ -117,7 +109,6 @@ namespace testAPI.Services
         {
             var subjectActivityDomain = await _dbContext.SubjectActivities.Include(sa => sa.Subject)
                                                               .Include(sa => sa.ActivityType)
-                                                              .Include(sa => sa.Classroom)
                                                               .Include(sa => sa.Instructor)
                                                               .FirstOrDefaultAsync(x => x.Id == id);
 
@@ -126,10 +117,9 @@ namespace testAPI.Services
 
             subjectActivityDomain.SubjectId = updateSubjectActivityDto.SubjectId;
             subjectActivityDomain.ActivityTypeId = updateSubjectActivityDto.ActivityTypeId;
-            subjectActivityDomain.ClassroomId = updateSubjectActivityDto.ClassroomId;
             subjectActivityDomain.InstructorId = updateSubjectActivityDto.InstructorId;
 
-            await _subjectActivityLogic.ValidateInstructorAndSubject(updateSubjectActivityDto.InstructorId, 
+            await _subjectActivityLogic.ValidateInstructorAndSubject(updateSubjectActivityDto.InstructorId,
                                                                      updateSubjectActivityDto.SubjectId);
 
             await _subjectActivityLogic.ValidateActivityType(updateSubjectActivityDto.ActivityTypeId);
@@ -141,22 +131,22 @@ namespace testAPI.Services
             _dbContext.SubjectActivities.Update(subjectActivityDomain);
             await _dbContext.SaveChangesAsync();
 
+
             // Get new updated Subject Activity
             subjectActivityDomain = await _dbContext.SubjectActivities.Include(sa => sa.Subject)
-                                                              .Include(sa => sa.ActivityType)
-                                                              .Include(sa => sa.Classroom)
-                                                              .Include(sa => sa.Instructor)
-                                                              .FirstOrDefaultAsync(x => x.Id == subjectActivityDomain.Id);
+                                                                      .Include(sa => sa.ActivityType)
+                                                                      .Include(sa => sa.Instructor)
+                                                                      .FirstOrDefaultAsync(sa => sa.Id == subjectActivityDomain.Id);
 
-            if (subjectActivityDomain is null)
-                throw new Exception("New updated Subject Activity not found !");
+            if (subjectActivityDomain == null)
+                throw new Exception("New updated Subject Activity not found!");
+
 
             var subjectActivityDto = new SubjectActivityDto()
             {
                 Id = subjectActivityDomain.Id,
                 Subject = subjectActivityDomain.Subject.Name,
                 ActivityType = subjectActivityDomain.ActivityType.Name,
-                Classroom = subjectActivityDomain.Classroom.Name,
                 Instructor = $"{subjectActivityDomain.Instructor.FirstName} {subjectActivityDomain.Instructor.LastName}"
             };
 
@@ -168,7 +158,6 @@ namespace testAPI.Services
         {
             var subjectActivityDomain = await _dbContext.SubjectActivities.Include(sa => sa.Subject)
                                                                           .Include(sa => sa.ActivityType)
-                                                                          .Include(sa => sa.Classroom)
                                                                           .Include(sa => sa.Instructor)
                                                                           .FirstOrDefaultAsync(x => x.Id == id);
 
@@ -179,8 +168,7 @@ namespace testAPI.Services
             {
                 Id = subjectActivityDomain.Id,
                 Subject = subjectActivityDomain.Subject.Name,
-                ActivityType= subjectActivityDomain.ActivityType.Name,
-                Classroom = subjectActivityDomain.Classroom.Name,
+                ActivityType = subjectActivityDomain.ActivityType.Name,
                 Instructor = $"{subjectActivityDomain.Instructor.FirstName} {subjectActivityDomain.Instructor.LastName}"
             };
 
@@ -189,6 +177,6 @@ namespace testAPI.Services
 
             return subjectActivityDto;
         }
-       
+
     }
 }

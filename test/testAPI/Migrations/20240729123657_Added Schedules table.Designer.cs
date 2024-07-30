@@ -12,8 +12,8 @@ using testAPI.Data;
 namespace testAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240724131241_Added SubjectActivities")]
-    partial class AddedSubjectActivities
+    [Migration("20240729123657_Added Schedules table")]
+    partial class AddedSchedulestable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -277,6 +277,64 @@ namespace testAPI.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("testAPI.Models.Domain.Schedule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClassroomId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SubjectActivityId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassroomId");
+
+                    b.HasIndex("SubjectActivityId");
+
+                    b.ToTable("Schedules");
+                });
+
+            modelBuilder.Entity("testAPI.Models.Domain.StudentAttendance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AttendanceDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsPresent")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectActivityId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("SubjectActivityId");
+
+                    b.ToTable("StudentAttendances");
+                });
+
             modelBuilder.Entity("testAPI.Models.Domain.Subject", b =>
                 {
                     b.Property<int>("Id")
@@ -316,9 +374,6 @@ namespace testAPI.Migrations
                     b.Property<int>("ActivityTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ClassroomId")
-                        .HasColumnType("int");
-
                     b.Property<int>("InstructorId")
                         .HasColumnType("int");
 
@@ -328,8 +383,6 @@ namespace testAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ActivityTypeId");
-
-                    b.HasIndex("ClassroomId");
 
                     b.HasIndex("InstructorId");
 
@@ -528,17 +581,49 @@ namespace testAPI.Migrations
                     b.Navigation("Sender");
                 });
 
+            modelBuilder.Entity("testAPI.Models.Domain.Schedule", b =>
+                {
+                    b.HasOne("testAPI.Models.Domain.Classroom", "Classroom")
+                        .WithMany("Schedules")
+                        .HasForeignKey("ClassroomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("testAPI.Models.Domain.SubjectActivity", "SubjectActivity")
+                        .WithMany("Schedules")
+                        .HasForeignKey("SubjectActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Classroom");
+
+                    b.Navigation("SubjectActivity");
+                });
+
+            modelBuilder.Entity("testAPI.Models.Domain.StudentAttendance", b =>
+                {
+                    b.HasOne("testAPI.Models.Domain.User", "Student")
+                        .WithMany("StudentAttendances")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("testAPI.Models.Domain.SubjectActivity", "SubjectActivity")
+                        .WithMany("StudentAttendances")
+                        .HasForeignKey("SubjectActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("SubjectActivity");
+                });
+
             modelBuilder.Entity("testAPI.Models.Domain.SubjectActivity", b =>
                 {
                     b.HasOne("testAPI.Models.Domain.ActivityType", "ActivityType")
                         .WithMany()
                         .HasForeignKey("ActivityTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("testAPI.Models.Domain.Classroom", "Classroom")
-                        .WithMany("SubjectActivities")
-                        .HasForeignKey("ClassroomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -555,8 +640,6 @@ namespace testAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("ActivityType");
-
-                    b.Navigation("Classroom");
 
                     b.Navigation("Instructor");
 
@@ -616,7 +699,7 @@ namespace testAPI.Migrations
                 {
                     b.Navigation("Exams");
 
-                    b.Navigation("SubjectActivities");
+                    b.Navigation("Schedules");
                 });
 
             modelBuilder.Entity("testAPI.Models.Domain.Department", b =>
@@ -651,6 +734,13 @@ namespace testAPI.Migrations
                     b.Navigation("SubjectsUsers");
                 });
 
+            modelBuilder.Entity("testAPI.Models.Domain.SubjectActivity", b =>
+                {
+                    b.Navigation("Schedules");
+
+                    b.Navigation("StudentAttendances");
+                });
+
             modelBuilder.Entity("testAPI.Models.Domain.User", b =>
                 {
                     b.Navigation("DepartmentsUsers");
@@ -662,6 +752,8 @@ namespace testAPI.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("ProfessorGrades");
+
+                    b.Navigation("StudentAttendances");
 
                     b.Navigation("StudentGrades");
 

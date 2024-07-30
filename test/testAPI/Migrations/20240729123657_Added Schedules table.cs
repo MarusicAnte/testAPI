@@ -6,47 +6,47 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace testAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedStudentAttendancestable : Migration
+    public partial class AddedSchedulestable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "StudentAttendances",
+                name: "Schedules",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AttendanceDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StudentId = table.Column<int>(type: "int", nullable: false),
                     SubjectActivityId = table.Column<int>(type: "int", nullable: false),
-                    IsPresent = table.Column<bool>(type: "bit", nullable: false)
+                    ClassroomId = table.Column<int>(type: "int", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentAttendances", x => x.Id);
+                    table.PrimaryKey("PK_Schedules", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StudentAttendances_SubjectActivities_SubjectActivityId",
-                        column: x => x.SubjectActivityId,
-                        principalTable: "SubjectActivities",
+                        name: "FK_Schedules_Classrooms_ClassroomId",
+                        column: x => x.ClassroomId,
+                        principalTable: "Classrooms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudentAttendances_Users_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Users",
+                        name: "FK_Schedules_SubjectActivities_SubjectActivityId",
+                        column: x => x.SubjectActivityId,
+                        principalTable: "SubjectActivities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentAttendances_StudentId",
-                table: "StudentAttendances",
-                column: "StudentId");
+                name: "IX_Schedules_ClassroomId",
+                table: "Schedules",
+                column: "ClassroomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentAttendances_SubjectActivityId",
-                table: "StudentAttendances",
+                name: "IX_Schedules_SubjectActivityId",
+                table: "Schedules",
                 column: "SubjectActivityId");
         }
 
@@ -54,7 +54,7 @@ namespace testAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "StudentAttendances");
+                name: "Schedules");
         }
     }
 }

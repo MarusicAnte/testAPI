@@ -22,6 +22,7 @@ namespace testAPI.Data
         public DbSet<Exam> Exams { get; set; }
         public DbSet<ActivityType> ActivityTypes { get; set; }
         public DbSet<SubjectActivity> SubjectActivities { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
         public DbSet<StudentAttendance> StudentAttendances { get; set; }
         public DbSet<ExamRegistration> ExamRegistrations { get; set; }
         public DbSet<SubjectUserJoin> SubjectsUsers { get; set; }
@@ -188,11 +189,6 @@ namespace testAPI.Data
                 .HasForeignKey(sa => sa.ActivityTypeId);
 
             modelBuilder.Entity<SubjectActivity>()
-                .HasOne(sa => sa.Classroom)
-                .WithMany(c => c.SubjectActivities)
-                .HasForeignKey(sa => sa.ClassroomId);
-
-            modelBuilder.Entity<SubjectActivity>()
                 .HasOne(sa => sa.Instructor)
                 .WithMany(i => i.SubjectActivities)
                 .HasForeignKey(sa => sa.InstructorId);
@@ -211,6 +207,23 @@ namespace testAPI.Data
                 .HasOne(st => st.SubjectActivity)
                 .WithMany(sa => sa.StudentAttendances)
                 .HasForeignKey(st => st.SubjectActivityId);
+
+
+            // Schedules
+            modelBuilder.Entity<Schedule>()
+                .HasKey(s => s.Id);
+
+            modelBuilder.Entity<Schedule>()
+                .HasOne(s => s.SubjectActivity)
+                .WithMany(sa => sa.Schedules)
+                .HasForeignKey(s => s.SubjectActivityId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Schedule>()
+                .HasOne(s => s.Classroom)
+                .WithMany(c => c.Schedules)
+                .HasForeignKey(s => s.ClassroomId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
     }

@@ -21,12 +21,12 @@ namespace testAPI.Services
 
         public async Task<List<StudentAttendanceDto>> GetAllStudentAttendances(StudentAttendanceQuery studentAttendanceQuery)
         {
-            var studentAttendancesDomain = await studentAttendanceQuery.GetStudentAttendanceQuery(_dbContext.StudentAttendances.Include(st => st.Student)
+            var studentAttendancesDomain = await studentAttendanceQuery.GetStudentAttendanceQuery(_dbContext.StudentAttendances.Include(sa => sa.Student)
                                                                                                                                .ThenInclude(s => s.Role)
-                                                                                                                               .Include(st => st.SubjectActivity)
-                                                                                                                               .ThenInclude(sa => sa.ActivityType)
-                                                                                                                               .Include(st => st.SubjectActivity)
-                                                                                                                               .ThenInclude(sa => sa.Subject)
+                                                                                                                               .Include(sa => sa.SubjectActivity)
+                                                                                                                               .ThenInclude(a => a.ActivityType)
+                                                                                                                               .Include(sa => sa.SubjectActivity)
+                                                                                                                               .ThenInclude(a => a.Subject)
                                                                                                   ).ToListAsync();
 
             if (studentAttendancesDomain is null || studentAttendancesDomain.Count == 0)
@@ -92,16 +92,17 @@ namespace testAPI.Services
             await _dbContext.SaveChangesAsync();
 
             // Get new created Student Attendance
-            studentAttendanceDomain = await _dbContext.StudentAttendances.Include(st => st.Student)
+            studentAttendanceDomain = await _dbContext.StudentAttendances.Include(sa => sa.Student)
                                                                          .ThenInclude(s => s.Role)
-                                                                         .Include(st => st.SubjectActivity)
-                                                                         .ThenInclude(sa => sa.ActivityType)
-                                                                         .Include(st => st.SubjectActivity)
-                                                                         .ThenInclude(sa => sa.Subject)
+                                                                         .Include(sa => sa.SubjectActivity)
+                                                                         .ThenInclude(a => a.ActivityType)
+                                                                         .Include(sa => sa.SubjectActivity)
+                                                                         .ThenInclude(a => a.Subject)
                                                                          .FirstOrDefaultAsync(x => x.Id == studentAttendanceDomain.Id);
 
             if (studentAttendanceDomain is null)
                 throw new Exception("New created Student Attendance not found !");
+
 
             var studentAttendanceDto = new StudentAttendanceDto()
             {
@@ -119,12 +120,12 @@ namespace testAPI.Services
 
         public async Task<StudentAttendanceDto> UpdateStudentAttendance(int id, UpdateStudentAttendanceDto updateStudentAttendanceDto)
         {
-            var studentAttendanceDomain = await _dbContext.StudentAttendances.Include(st => st.Student)
+            var studentAttendanceDomain = await _dbContext.StudentAttendances.Include(sa => sa.Student)
                                                                              .ThenInclude(s => s.Role)
-                                                                             .Include(st => st.SubjectActivity)
-                                                                             .ThenInclude(sa => sa.ActivityType)
-                                                                             .Include(st => st.SubjectActivity)
-                                                                             .ThenInclude(sa => sa.Subject)
+                                                                             .Include(sa => sa.SubjectActivity)
+                                                                             .ThenInclude(a => a.ActivityType)
+                                                                             .Include(sa => sa.SubjectActivity)
+                                                                             .ThenInclude(a => a.Subject)
                                                                              .FirstOrDefaultAsync(x => x.Id == id);
 
             if (studentAttendanceDomain is null)
@@ -132,10 +133,6 @@ namespace testAPI.Services
 
             await _studentAttendanceLogic.ValidateStudentAndSubjectActivity(updateStudentAttendanceDto.StudentId,
                                                                 updateStudentAttendanceDto.SubjectActivityId);
-
-            await _studentAttendanceLogic.ValidateExistingStudentAttendance(updateStudentAttendanceDto.AttendanceDateTime,
-                                                                             updateStudentAttendanceDto.StudentId,
-                                                                             updateStudentAttendanceDto.SubjectActivityId);
 
             studentAttendanceDomain.AttendanceDateTime = updateStudentAttendanceDto.AttendanceDateTime;
             studentAttendanceDomain.StudentId = updateStudentAttendanceDto.StudentId;
@@ -145,17 +142,19 @@ namespace testAPI.Services
             _dbContext.StudentAttendances.Update(studentAttendanceDomain);
             await _dbContext.SaveChangesAsync();
 
-            // Get new created Student Attendance
-            studentAttendanceDomain = await _dbContext.StudentAttendances.Include(st => st.Student)
+
+            // Get new updated Student Attendance
+            studentAttendanceDomain = await _dbContext.StudentAttendances.Include(sa => sa.Student)
                                                                          .ThenInclude(s => s.Role)
-                                                                         .Include(st => st.SubjectActivity)
-                                                                         .ThenInclude(sa => sa.ActivityType)
-                                                                         .Include(st => st.SubjectActivity)
-                                                                         .ThenInclude(sa => sa.Subject)
+                                                                         .Include(sa => sa.SubjectActivity)
+                                                                         .ThenInclude(a => a.ActivityType)
+                                                                         .Include(sa => sa.SubjectActivity)
+                                                                         .ThenInclude(a => a.Subject)
                                                                          .FirstOrDefaultAsync(x => x.Id == studentAttendanceDomain.Id);
 
             if (studentAttendanceDomain is null)
                 throw new Exception("New updated Student Attendance not found !");
+
 
             var studentAttendanceDto = new StudentAttendanceDto()
             {

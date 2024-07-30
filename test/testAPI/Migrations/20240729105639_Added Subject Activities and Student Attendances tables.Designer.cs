@@ -12,8 +12,8 @@ using testAPI.Data;
 namespace testAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240726102807_Added StudentAttendances table")]
-    partial class AddedStudentAttendancestable
+    [Migration("20240729105639_Added Subject Activities and Student Attendances tables")]
+    partial class AddedSubjectActivitiesandStudentAttendancestables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -345,9 +345,6 @@ namespace testAPI.Migrations
                     b.Property<int>("ActivityTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ClassroomId")
-                        .HasColumnType("int");
-
                     b.Property<int>("InstructorId")
                         .HasColumnType("int");
 
@@ -357,8 +354,6 @@ namespace testAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ActivityTypeId");
-
-                    b.HasIndex("ClassroomId");
 
                     b.HasIndex("InstructorId");
 
@@ -584,12 +579,6 @@ namespace testAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("testAPI.Models.Domain.Classroom", "Classroom")
-                        .WithMany("SubjectActivities")
-                        .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("testAPI.Models.Domain.User", "Instructor")
                         .WithMany("SubjectActivities")
                         .HasForeignKey("InstructorId")
@@ -603,8 +592,6 @@ namespace testAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("ActivityType");
-
-                    b.Navigation("Classroom");
 
                     b.Navigation("Instructor");
 
@@ -663,8 +650,6 @@ namespace testAPI.Migrations
             modelBuilder.Entity("testAPI.Models.Domain.Classroom", b =>
                 {
                     b.Navigation("Exams");
-
-                    b.Navigation("SubjectActivities");
                 });
 
             modelBuilder.Entity("testAPI.Models.Domain.Department", b =>
