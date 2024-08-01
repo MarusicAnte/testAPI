@@ -1,6 +1,8 @@
 ﻿using eStudent.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using testAPI.Constants;
 using testAPI.Interfaces;
 using testAPI.Models.Domain;
 using testAPI.Models.DTO.SubjectDtos;
@@ -13,12 +15,12 @@ namespace testAPI.Controllers
     public class SubjectsController : BaseController
     {
         private readonly ISubjectService _subjectService;
-
         public SubjectsController(ISubjectService subjectService)
         {
             _subjectService = subjectService;
         }
 
+        [Authorize(Policy = "AnyUserRole")]
         [HttpGet]
         public async Task<List<SubjectDto>> GetAll([FromQuery] SubjectQuery subjectQuery)
         {
@@ -26,6 +28,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "AnyUserRole")]
         [HttpGet("{id}")]
         public async Task<SubjectDto> GetById([FromRoute] int id)
         {
@@ -33,6 +36,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "AdminPermission")]
         [HttpPost]
         public async Task<SubjectDto> Create([FromBody] CreateSubjectDto createSubjectDto)
         {
@@ -40,6 +44,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "AdminPermission")]
         [HttpPatch("{id}")]
         public async Task<SubjectDto> Update([FromRoute] int id, [FromBody] UpdateSubjectDto updateSubjectDto)
         {
@@ -47,6 +52,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "Adminpermission")]
         [HttpDelete("{id}")]
         public async Task<SubjectDto> Delete([FromRoute] int id) 
         {

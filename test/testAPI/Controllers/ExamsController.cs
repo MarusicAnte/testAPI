@@ -1,4 +1,5 @@
 ﻿using eStudent.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using testAPI.Interfaces;
@@ -18,6 +19,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "AnyUserRole")]
         [HttpGet]
         public async Task<List<ExamDto>> GetAll([FromQuery] ExamQuery examQuery)
         {
@@ -25,6 +27,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "AnyUserRole")]
         [HttpGet("{id}")]
         public async Task<ExamDto> GetById([FromRoute] int id)
         {
@@ -32,6 +35,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "Admin/Professor/Asistant")]
         [HttpPost]
         public async Task<ExamDto> Create([FromBody] CreateExamDto createExamDto)
         {
@@ -39,6 +43,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "Admin/Professor/Asistant")]
         [HttpPatch("{id}")]
         public async Task<ExamDto> UpdateById([FromRoute] int id, [FromBody] UpdateExamDto updateExamDto)
         {
@@ -46,6 +51,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "Admin/Professor/Asistant")]
         [HttpDelete("{id}")]
         public async Task<ExamDto> DeleteById([FromRoute] int id)
         {

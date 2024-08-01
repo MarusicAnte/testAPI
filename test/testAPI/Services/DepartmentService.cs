@@ -20,6 +20,7 @@ namespace testAPI.Services
         {
             var departmentsDomain = await _dbContext.Departments.Include(d => d.DepartmentsUsers)
                                                                 .ThenInclude(du => du.User)
+                                                                .ThenInclude(u => u.Role)
                                                                 .Include(d => d.DepartmentsSubjects)
                                                                 .ThenInclude(ds => ds.Subject)
                                                                 .ToListAsync();
@@ -39,7 +40,7 @@ namespace testAPI.Services
                     FirstName = u.User.FirstName,
                     LastName = u.User.LastName,
                     Email = u.User.Email,
-                    RoleId = u.User.RoleId
+                    Role = u.User.Role.Name
                 }).ToList(),
                 Subjects = departmentDomain.DepartmentsSubjects.Select(s => new DepartmentSubjectsDto()
                 {
@@ -56,6 +57,7 @@ namespace testAPI.Services
         {
             var departmentDomain = await _dbContext.Departments.Include(d => d.DepartmentsUsers)
                                                                .ThenInclude(du => du.User)
+                                                               .ThenInclude(u => u.Role)
                                                                .Include(d => d.DepartmentsSubjects)
                                                                .ThenInclude(ds => ds.Subject)
                                                                .FirstOrDefaultAsync(d => d.Id == id);
@@ -74,7 +76,7 @@ namespace testAPI.Services
                     FirstName = u.User.FirstName,
                     LastName = u.User.LastName,
                     Email = u.User.Email,
-                    RoleId = u.User.RoleId
+                    Role = u.User.Role.Name
                 }).ToList(),
                 Subjects = departmentDomain.DepartmentsSubjects.Select(s => new DepartmentSubjectsDto
                 {
@@ -105,6 +107,7 @@ namespace testAPI.Services
             // Get model and convert Domain to DTO
             departmentDomain = await _dbContext.Departments.Include(d => d.DepartmentsUsers)
                                                            .ThenInclude(du => du.User)
+                                                           .ThenInclude(u => u.Role)
                                                            .Include(d => d.DepartmentsSubjects)
                                                            .ThenInclude(ds => ds.Subject)
                                                            .FirstOrDefaultAsync(d => d.Id == departmentDomain.Id);
@@ -123,7 +126,7 @@ namespace testAPI.Services
                     FirstName = du.User.FirstName,
                     LastName = du.User.LastName,
                     Email = du.User.Email,
-                    RoleId = du.User.RoleId
+                    Role = du.User.Role.Name
                 }).ToList(),
                 Subjects = departmentDomain.DepartmentsSubjects.Select(ds => new DepartmentSubjectsDto
                 {
@@ -160,6 +163,7 @@ namespace testAPI.Services
             // Get updated department model
             var updatedDepartmentModel = await _dbContext.Departments.Include(d => d.DepartmentsUsers)
                                                                      .ThenInclude(du => du.User)
+                                                                     .ThenInclude(u => u.Role)
                                                                      .Include(d => d.DepartmentsSubjects)
                                                                      .ThenInclude(ds => ds.Subject)
                                                                      .FirstOrDefaultAsync(d => d.Id == id);
@@ -179,7 +183,7 @@ namespace testAPI.Services
                     FirstName = du.User.FirstName,
                     LastName = du.User.LastName,
                     Email = du.User.Email,
-                    RoleId = du.User.RoleId
+                    Role = du.User.Role.Name
                 }).ToList(),
                 Subjects = updatedDepartmentModel.DepartmentsSubjects.Select(ds => new DepartmentSubjectsDto
                 {
@@ -198,6 +202,7 @@ namespace testAPI.Services
         {
             var departmentDomain = await _dbContext.Departments.Include(d => d.DepartmentsUsers)
                                                               .ThenInclude(du => du.User)
+                                                              .ThenInclude(u => u.Role)
                                                               .Include(d => d.DepartmentsSubjects)
                                                               .ThenInclude(ds => ds.Subject)
                                                               .FirstOrDefaultAsync(d => d.Id == id);
@@ -217,7 +222,7 @@ namespace testAPI.Services
                     FirstName = du.User.FirstName,
                     LastName = du.User.LastName,
                     Email = du.User.Email,
-                    RoleId = du.User.RoleId
+                    Role = du.User.Role.Name
                 }).ToList(),
                 Subjects = departmentDomain.DepartmentsSubjects.Select(ds => new DepartmentSubjectsDto
                 {

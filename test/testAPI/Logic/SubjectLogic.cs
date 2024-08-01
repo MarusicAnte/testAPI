@@ -20,18 +20,20 @@ namespace testAPI.Logic
         }
 
 
-        public async Task ValidateUsersForSubject(int subjectId, List<int> usersIds)
+        public async Task ValidateUsersForSubject(List<int> usersIds)
         {
-            var existingUsers = await _dbContext.SubjectsUsers
-                                                .Where(su => su.SubjectId == subjectId && usersIds.Contains(su.UserId))
-                                                .Select(su => su.UserId)
-                                                .ToListAsync();
+            var existingUserIds = await _dbContext.Users.Include(u => u.Role)
+                                              .Where(u => usersIds.Contains(u.Id))
+                                              .Select(u => u.Id)
+                                              .ToListAsync();
 
-            if (existingUsers.Any())
+            // Provjerite koji korisnici ne postoje
+            var nonExistentUserIds = usersIds.Except(existingUserIds).ToList();
+            if (nonExistentUserIds.Any())
             {
-                var existingUserIds = string.Join(", ", existingUsers);
-                throw new Exception($"Users with Ids {existingUserIds} are already exist for the subjectId {subjectId}.");
-            }       
+                var nonExistentUsers = string.Join(", ", nonExistentUserIds);
+                throw new Exception($"Users with Ids {nonExistentUsers} do not exist.");
+            }
         }
 
 

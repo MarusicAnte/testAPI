@@ -12,5 +12,6 @@ namespace testAPI.Interfaces
         public Task<UserDto> CreateUser(CreateUserDto createUserDto);
         public Task<UserDto> UpdateUserById(int id, UpdateUserDto updatedUserDto);
         public Task<UserDto> DeleteUserById(int id);
+        Task<User> ValidateUserAsync(string email, string password);
     }
 }

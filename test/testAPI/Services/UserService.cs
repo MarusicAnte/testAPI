@@ -36,7 +36,7 @@ namespace testAPI.Services
                 Email = userDomain.Email,
                 Password = userDomain.Password,
                 ImageURL = userDomain.ImageURL,
-                RoleId = userDomain.RoleId,
+                Role = userDomain.Role.Name,
                 Subjects = userDomain.SubjectsUsers.Select(su => new UserSubjectDto
                 {
                     Id = su.Subject.Id,
@@ -79,7 +79,7 @@ namespace testAPI.Services
                 Email = userDomain.Email,
                 Password = userDomain.Password,
                 ImageURL = userDomain.ImageURL,
-                RoleId = userDomain.RoleId,
+                Role = userDomain.Role.Name,
                 Subjects = userDomain.SubjectsUsers.Select(su => new UserSubjectDto
                 {
                     Id = su.Subject.Id,
@@ -106,7 +106,7 @@ namespace testAPI.Services
                 FirstName = createUserDto.FirstName,
                 LastName = createUserDto.LastName,
                 Email = createUserDto.Email,
-                Password = createUserDto.Password,
+                Password = await HashPassword(createUserDto.Password),
                 ImageURL = createUserDto.ImageURL,
                 RoleId = createUserDto.RoleId,
                 SubjectsUsers = await GetSubjectsForUser(createUserDto.SubjectIds),
@@ -137,7 +137,7 @@ namespace testAPI.Services
                 Email = userDomain.Email,
                 Password = userDomain.Password,
                 ImageURL = userDomain.ImageURL,
-                RoleId = userDomain.RoleId,
+                Role = userDomain.Role.Name,
                 Subjects = userDomain.SubjectsUsers.Select(su => new UserSubjectDto
                 {
                     Id = su.Subject.Id,
@@ -174,7 +174,7 @@ namespace testAPI.Services
             userDomain.FirstName = updateUserDto.FirstName;
             userDomain.LastName = updateUserDto.LastName;
             userDomain.Email = updateUserDto.Email;
-            userDomain.Password = updateUserDto.Password;
+            userDomain.Password = await HashPassword(updateUserDto.Password);
             userDomain.ImageURL = updateUserDto.ImageURL;
             userDomain.RoleId = updateUserDto.RoleId;
             userDomain.SubjectsUsers = await GetSubjectsForUser(updateUserDto.SubjectIds);
@@ -205,7 +205,7 @@ namespace testAPI.Services
                 Email = updatedUserDomain.Email,
                 Password = updatedUserDomain.Password,
                 ImageURL = updatedUserDomain.ImageURL,
-                RoleId = updatedUserDomain.RoleId,
+                Role = updatedUserDomain.Role.Name,
                 Subjects = updatedUserDomain.SubjectsUsers.Select(su => new UserSubjectDto
                 {
                     Id = su.Subject.Id,
@@ -247,7 +247,7 @@ namespace testAPI.Services
                 Email = userDomain.Email,
                 Password = userDomain.Password,
                 ImageURL = userDomain.ImageURL,
-                RoleId = userDomain.RoleId,
+                Role = userDomain.Role.Name,
                 Subjects = userDomain.SubjectsUsers.Select(su => new UserSubjectDto
                 {
                     Id = su.Subject.Id,
@@ -295,6 +295,29 @@ namespace testAPI.Services
             }).ToList();
 
             return departmentsUsers;
+        }
+
+
+        public async Task<string> HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        public async Task<User> ValidateUserAsync(string email, string password)
+        {
+            // Find the user by email
+            var user = await _dbContext.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user is null)
+                return null;
+
+            
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
+
+            if (!isPasswordValid)
+                return null;
+
+            return user;
         }
     }
 }

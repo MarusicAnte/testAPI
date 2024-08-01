@@ -24,10 +24,12 @@ namespace testAPI.Services
         {
             var subjectsDomain = await subjectQuery.GetSubjectQuery(_dbContext.Subjects.Include(s => s.SubjectsUsers)
                                                                                        .ThenInclude(su => su.User)
+                                                                                       .ThenInclude(u => u.Role)
                                                                                        .Include(s => s.DepartmentsSubjects)
                                                                                        .ThenInclude(ds => ds.Department)
                                                                                        .Include(sn => sn.SubjectsNotifications)
-                                                                                       .ThenInclude(sn => sn.Notification)).ToListAsync();
+                                                                                       .ThenInclude(sn => sn.Notification)
+                                                                    ).ToListAsync();
 
             if (subjectsDomain is null)
                 throw new Exception("Subjects does not exist !");
@@ -45,7 +47,7 @@ namespace testAPI.Services
                     FirstName = su.User.FirstName,
                     LastName = su.User.LastName,
                     Email = su.User.Email,
-                    RoleId = su.User.RoleId
+                    Role = su.User.Role.Name
                 }).ToList(),
                 Departments = subjectDomain.DepartmentsSubjects.Select(ds => new SubjectDepartmentsDto
                 {
@@ -58,7 +60,7 @@ namespace testAPI.Services
                     CreatedTime = sn.Notification.CreatedTime,
                     Title = sn.Notification.Title,
                     Description = sn.Notification.Description,
-                    SenderId = sn.Notification.SenderId,
+                    Sender = $"{sn.Notification.Sender.FirstName} {sn.Notification.Sender.LastName}",
                 }).ToList()
             }).ToList();
         }
@@ -68,6 +70,7 @@ namespace testAPI.Services
         {
             var subjectDomain = await _dbContext.Subjects.Include(s =>s.SubjectsUsers)
                                                          .ThenInclude(su => su.User)
+                                                         .ThenInclude(u => u.Role)
                                                          .Include(s => s.DepartmentsSubjects)
                                                          .ThenInclude(ds => ds.Department)
                                                          .Include(s => s.SubjectsNotifications)
@@ -91,7 +94,7 @@ namespace testAPI.Services
                     FirstName=s.User.FirstName,
                     LastName=s.User.LastName,
                     Email = s.User.Email,
-                    RoleId=s.User.RoleId
+                    Role=s.User.Role.Name
                 }).ToList(),
                 Departments = subjectDomain.DepartmentsSubjects.Select(ds => new SubjectDepartmentsDto
                 {
@@ -104,7 +107,7 @@ namespace testAPI.Services
                     CreatedTime = sn.Notification.CreatedTime,
                     Title = sn.Notification.Title,
                     Description = sn.Notification.Description,
-                    SenderId = sn.Notification.SenderId,
+                    Sender = $"{sn.Notification.Sender.FirstName} {sn.Notification.Sender.LastName}",
                 }).ToList()
             };
 
@@ -117,6 +120,8 @@ namespace testAPI.Services
             await _subjectLogic.ValidateExistingSubject(createSubjectDto.Name, 
                                                         createSubjectDto.Semester, 
                                                         createSubjectDto.ECTS);
+
+            await _subjectLogic.ValidateUsersForSubject(createSubjectDto.UsersIds);
 
             var subjectDomain = new Subject
             {
@@ -134,9 +139,12 @@ namespace testAPI.Services
             
             // Get new created subject
             subjectDomain = await _dbContext.Subjects.Include(su => su.SubjectsUsers)
-                                                   .ThenInclude(su => su.User)  
+                                                   .ThenInclude(su => su.User)
+                                                   .ThenInclude(u => u.Role)
                                                    .Include(ds => ds.DepartmentsSubjects)
                                                    .ThenInclude(ds => ds.Department)
+                                                   .Include(s => s.SubjectsNotifications)
+                                                   .ThenInclude(sn =>sn.Notification)
                                                    .FirstOrDefaultAsync(u => u.Id == subjectDomain.Id);
             
             if (subjectDomain is null)
@@ -156,7 +164,7 @@ namespace testAPI.Services
                     FirstName= su.User.FirstName,
                     LastName= su.User.LastName,
                     Email=su.User.Email,
-                    RoleId=su.User.RoleId,
+                    Role=su.User.Role.Name,
                 }).ToList(),
                 Departments = subjectDomain.DepartmentsSubjects.Select(ds => new SubjectDepartmentsDto
                 {
@@ -185,8 +193,8 @@ namespace testAPI.Services
             subjectDomain.ECTS = updateSubjectDto.ECTS;
             subjectDomain.Description = updateSubjectDto.Description;
 
-            await _subjectLogic.ValidateUsersForSubject(id, updateSubjectDto.UsersIds);
-            await _subjectLogic.ValidateDepartmentsForSubject(id, updateSubjectDto.DepartmentsIds);
+            await _subjectLogic.ValidateUsersForSubject(updateSubjectDto.UsersIds);
+            //await _subjectLogic.ValidateDepartmentsForSubject(id, updateSubjectDto.DepartmentsIds);
 
             subjectDomain.SubjectsUsers = await GetUsersForSubject(updateSubjectDto.UsersIds);
             subjectDomain.DepartmentsSubjects = await GetDepartmentsForSubject(updateSubjectDto.DepartmentsIds);
@@ -197,8 +205,11 @@ namespace testAPI.Services
             // Get new updated subject 
             subjectDomain = await _dbContext.Subjects.Include(s => s.SubjectsUsers)
                                                    .ThenInclude(su => su.User)
+                                                   .ThenInclude(u => u.Role)
                                                    .Include(s => s.DepartmentsSubjects)
                                                    .ThenInclude(ds => ds.Department)
+                                                   .Include(s => s.SubjectsNotifications)
+                                                   .ThenInclude(sn => sn.Notification)
                                                    .FirstOrDefaultAsync(s => s.Id == subjectDomain.Id);
 
             if (subjectDomain is null)
@@ -217,7 +228,7 @@ namespace testAPI.Services
                     FirstName = us.User.FirstName,
                     LastName = us.User.LastName,
                     Email = us.User.Email,
-                    RoleId = us.User.RoleId
+                    Role = us.User.Role.Name
                 }).ToList(),
                 Departments = subjectDomain.DepartmentsSubjects.Select(ds => new SubjectDepartmentsDto
                 {
@@ -234,6 +245,7 @@ namespace testAPI.Services
         {
             var subjectDomain = await _dbContext.Subjects.Include(s => s.SubjectsUsers)
                                                          .ThenInclude(su => su.User)
+                                                         .ThenInclude(u => u.Role)
                                                          .Include(s => s.DepartmentsSubjects)
                                                          .ThenInclude(ds => ds.Department)
                                                          .Include(s => s.SubjectsNotifications)
@@ -256,7 +268,7 @@ namespace testAPI.Services
                     FirstName = us.User.FirstName,
                     LastName = us.User.LastName,
                     Email = us.User.Email,
-                    RoleId = us.User.RoleId
+                    Role = us.User.Role.Name
                 }).ToList(),
                 Departments = subjectDomain.DepartmentsSubjects.Select(ds => new SubjectDepartmentsDto
                 {
@@ -268,7 +280,7 @@ namespace testAPI.Services
                     Id = sn.Notification.Id,
                     Title = sn.Notification.Title,
                     Description = sn.Notification.Description,
-                    SenderId = sn.Notification.SenderId,
+                    Sender = $"{sn.Notification.Sender.FirstName} {sn.Notification.Sender.LastName}",
                 }).ToList()
             };
             

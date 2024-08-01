@@ -1,4 +1,5 @@
 ﻿using eStudent.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using testAPI.Interfaces;
@@ -19,6 +20,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "AnyUserRole")]
         [HttpGet]
         public async Task<List<NotificationDto>> GetAll([FromQuery] NotificationQuery notificationQuery)
         {
@@ -26,6 +28,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "AnyUserRole")]
         [HttpGet("{id}")]
         public async Task<NotificationDto> GetById([FromRoute] int id)
         {
@@ -33,6 +36,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "Admin/Professor/Asistant")]
         [HttpPost]
         public async Task<NotificationDto> Create([FromBody] CreateNotificationDto createNotificationDto)
         {
@@ -40,6 +44,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "Admin/Professor/Asistant")]
         [HttpPatch("{id}")]
         public async Task<NotificationDto> UpdateById([FromRoute] int id, [FromBody] UpdateNotificationDto updateNotificationDto)
         {
@@ -47,6 +52,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "Admin/Professor/Asistant")]
         [HttpDelete("{id}")]
         public async Task<NotificationDto> DeleteById([FromRoute] int id)
         {

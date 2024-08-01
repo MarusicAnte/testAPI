@@ -1,4 +1,5 @@
 ﻿using eStudent.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using testAPI.Interfaces;
@@ -18,6 +19,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "AnyUserRole")]
         [HttpGet]
         public async Task<List<ScheduleDto>> GetAll([FromQuery] ScheduleQuery scheduleQuery)
         {
@@ -25,6 +27,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "AnyUserRole")]
         [HttpGet("{id}")]
         public async Task<ScheduleDto> GetById([FromRoute] int id)
         {
@@ -32,6 +35,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "Admin/Professor/Asistant")]
         [HttpPost]
         public async Task<ScheduleDto> Create([FromBody] CreateScheduleDto createScheduleDto)
         {
@@ -39,6 +43,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "Admin/Professor/Asistant")]
         [HttpPatch("{id}")]
         public async Task<ScheduleDto> UpdateById([FromRoute] int id, [FromBody] UpdateScheduleDto updateScheduleDto)
         {
@@ -46,6 +51,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = "Admin/Professor/Asistant")]
         [HttpDelete("{id}")]
         public async Task<ScheduleDto> DeleteById([FromRoute] int id)
         {
