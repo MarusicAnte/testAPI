@@ -19,7 +19,7 @@ namespace testAPI.Services
             _subjectActivityLogic = subjectActivityLogic;
         }
 
-        public async Task<List<SubjectActivityDto>> GetAllSubjectActivities(SubjectActivityQuery subjectActivityQuery)
+        public async Task<List<ActivityDto>> GetAllSubjectActivities(SubjectActivityQuery subjectActivityQuery)
         {
             var subjectActivitiesDomain = await subjectActivityQuery.GetSubjectActivityQuery(_dbContext.SubjectActivities.Include(sa => sa.Subject)
                                                                                                                          .Include(sa => sa.ActivityType)
@@ -30,7 +30,7 @@ namespace testAPI.Services
                 throw new Exception("Subject Activities does not exist !");
 
             // Map Domains to DTOs
-            return subjectActivitiesDomain.Select(subjectActivityDomain => new SubjectActivityDto()
+            return subjectActivitiesDomain.Select(subjectActivityDomain => new ActivityDto()
             {
                 Id = subjectActivityDomain.Id,
                 Subject = subjectActivityDomain.Subject.Name,
@@ -40,7 +40,7 @@ namespace testAPI.Services
         }
 
 
-        public async Task<SubjectActivityDto> GetSubjectActivityById(int id)
+        public async Task<ActivityDto> GetSubjectActivityById(int id)
         {
             var subjectActivityDomain = await _dbContext.SubjectActivities.Include(sa => sa.Subject)
                                                                           .Include(sa => sa.ActivityType)
@@ -50,7 +50,7 @@ namespace testAPI.Services
             if (subjectActivityDomain is null)
                 throw new Exception($"Subject Activity with id {id} does not exist !");
 
-            var subjectActivityDto = new SubjectActivityDto()
+            var subjectActivityDto = new ActivityDto()
             {
                 Id = subjectActivityDomain.Id,
                 Subject = subjectActivityDomain.Subject.Name,
@@ -63,7 +63,7 @@ namespace testAPI.Services
         }
 
 
-        public async Task<SubjectActivityDto> CreateSubjectActivity(CreateSubjectActivityDto createSubjectActivityDto)
+        public async Task<ActivityDto> CreateSubjectActivity(CreateSubjectActivityDto createSubjectActivityDto)
         {
             await _subjectActivityLogic.ValidateInstructorAndSubject(createSubjectActivityDto.InstructorId, createSubjectActivityDto.SubjectId);
 
@@ -93,7 +93,7 @@ namespace testAPI.Services
                 throw new Exception("New created Subject Activity not found!");
 
             // Map Domain to DTO
-            var subjectActivityDto = new SubjectActivityDto
+            var subjectActivityDto = new ActivityDto
             {
                 Id = subjectActivityDomain.Id,
                 Subject = subjectActivityDomain.Subject.Name,
@@ -105,7 +105,7 @@ namespace testAPI.Services
         }
 
 
-        public async Task<SubjectActivityDto> UpdateSubjectActivityById(int id, UpdateSubjectActivityDto updateSubjectActivityDto)
+        public async Task<ActivityDto> UpdateSubjectActivityById(int id, UpdateSubjectActivityDto updateSubjectActivityDto)
         {
             var subjectActivityDomain = await _dbContext.SubjectActivities.Include(sa => sa.Subject)
                                                               .Include(sa => sa.ActivityType)
@@ -142,7 +142,7 @@ namespace testAPI.Services
                 throw new Exception("New updated Subject Activity not found!");
 
 
-            var subjectActivityDto = new SubjectActivityDto()
+            var subjectActivityDto = new ActivityDto()
             {
                 Id = subjectActivityDomain.Id,
                 Subject = subjectActivityDomain.Subject.Name,
@@ -154,7 +154,7 @@ namespace testAPI.Services
         }
 
 
-        public async Task<SubjectActivityDto> DeleteSubjectActivityById(int id)
+        public async Task<ActivityDto> DeleteSubjectActivityById(int id)
         {
             var subjectActivityDomain = await _dbContext.SubjectActivities.Include(sa => sa.Subject)
                                                                           .Include(sa => sa.ActivityType)
@@ -164,7 +164,7 @@ namespace testAPI.Services
             if (subjectActivityDomain is null)
                 throw new Exception($"Subject Activity with id {id} does not exist !");
 
-            var subjectActivityDto = new SubjectActivityDto()
+            var subjectActivityDto = new ActivityDto()
             {
                 Id = subjectActivityDomain.Id,
                 Subject = subjectActivityDomain.Subject.Name,

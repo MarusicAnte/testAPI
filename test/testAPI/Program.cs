@@ -89,6 +89,16 @@ builder.Services.AddScoped<StudentAttendanceLogic>();
 builder.Services.AddScoped<UserHelper>();
 
 
+// Register CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
+
+
 // Add JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -108,12 +118,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // Add Authorization
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminPermission", policy => policy.RequireRole(RolesConstant.Administrator));
-    options.AddPolicy("StudentPermission", policy => policy.RequireRole(RolesConstant.Student));
-    options.AddPolicy("ProfessorPermission", policy => policy.RequireRole(RolesConstant.Profesor));
-    options.AddPolicy("ProfessorPermission", policy => policy.RequireRole(RolesConstant.Profesor));
-    options.AddPolicy("AsistantPermission", policy => policy.RequireRole(RolesConstant.Asistent));
-    options.AddPolicy("Admin/Professor/Asistant", policy =>
+    options.AddPolicy(RolesConstant.Administrator, policy => policy.RequireRole(RolesConstant.Administrator));
+    options.AddPolicy(RolesConstant.Student, policy => policy.RequireRole(RolesConstant.Student));
+    options.AddPolicy(RolesConstant.Profesor, policy => policy.RequireRole(RolesConstant.Profesor));
+    options.AddPolicy(RolesConstant.Asistent, policy => policy.RequireRole(RolesConstant.Asistent));
+    options.AddPolicy(RolesConstant.AdminProfesorAsistent, policy =>
     {
         policy.RequireAssertion(context =>
             context.User.IsInRole(RolesConstant.Administrator)||
@@ -121,7 +130,7 @@ builder.Services.AddAuthorization(options =>
             context.User.IsInRole(RolesConstant.Asistent)
         );
     });
-    options.AddPolicy("AnyUserRole", policy =>
+    options.AddPolicy(RolesConstant.AnyUserRole, policy =>
     {
         policy.RequireAssertion(context =>
             context.User.IsInRole(RolesConstant.Administrator) ||
@@ -144,6 +153,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Apply CORS policy
+app.UseCors("AllowAll");
 
 // Add Authentication Middleware
 app.UseAuthentication();

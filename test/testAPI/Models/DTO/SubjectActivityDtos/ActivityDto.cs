@@ -1,6 +1,6 @@
 ﻿namespace testAPI.Models.DTO.SubjectActivityDtos
 {
-    public class SubjectActivityDto
+    public class ActivityDto
     {
         public int Id { get; set; }
         public string Subject { get; set; }

@@ -33,5 +33,12 @@ namespace testAPI.Controllers
             var token = _tokenService.GenerateToken(user);
             return Ok(new { Token = token });
         }
+
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            return Ok("Logout successful.");
+        }
     }
 }

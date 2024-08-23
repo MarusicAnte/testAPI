@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using testAPI.Constants;
 using testAPI.Data;
 using testAPI.Interfaces;
 using testAPI.Logic;
@@ -29,6 +30,10 @@ namespace testAPI.Services
                                                                                        .ThenInclude(ds => ds.Department)
                                                                                        .Include(sn => sn.SubjectsNotifications)
                                                                                        .ThenInclude(sn => sn.Notification)
+                                                                                       .Include(s => s.SubjectActivities)
+                                                                                       .ThenInclude(sa => sa.ActivityType)
+                                                                                       .Include(s => s.SubjectActivities)
+                                                                                       .ThenInclude(sa => sa.Instructor)
                                                                     ).ToListAsync();
 
             if (subjectsDomain is null)
@@ -54,6 +59,12 @@ namespace testAPI.Services
                     Id = ds.Department.Id,
                     Name = ds.Department.Name
                 }).ToList(),
+                Activities = subjectDomain.SubjectActivities.Select(sa => new SubjectActivityDto 
+                { 
+                    Id = sa.Id,
+                    Activity = sa.ActivityType.Name,
+                    Instructor = $"{sa.Instructor.FirstName} {sa.Instructor.LastName}"
+                }).ToList(),
                 Notifications = subjectDomain.SubjectsNotifications.Select(sn => new SubjectNotificationsDto
                 {
                     Id = sn.Notification.Id,
@@ -75,6 +86,10 @@ namespace testAPI.Services
                                                          .ThenInclude(ds => ds.Department)
                                                          .Include(s => s.SubjectsNotifications)
                                                          .ThenInclude(sn => sn.Notification)
+                                                         .Include(s => s.SubjectActivities)
+                                                         .ThenInclude(sa => sa.ActivityType)
+                                                         .Include(s => s.SubjectActivities)
+                                                         .ThenInclude(sa => sa.Instructor)
                                                          .FirstOrDefaultAsync(s => s.Id==id);
 
             if (subjectDomain is null)
@@ -101,6 +116,12 @@ namespace testAPI.Services
                     Id = ds.Department.Id,
                     Name = ds.Department.Name
                 }).ToList(),
+                Activities = subjectDomain.SubjectActivities.Select(sa => new SubjectActivityDto
+                {
+                    Id = sa.Id,
+                    Activity = sa.ActivityType.Name,
+                    Instructor = $"{sa.Instructor.FirstName} {sa.Instructor.LastName}"
+                }).ToList(),
                 Notifications = subjectDomain.SubjectsNotifications.Select(sn => new SubjectNotificationsDto
                 {
                     Id = sn.Notification.Id,
@@ -121,7 +142,7 @@ namespace testAPI.Services
                                                         createSubjectDto.Semester, 
                                                         createSubjectDto.ECTS);
 
-            await _subjectLogic.ValidateUsersForSubject(createSubjectDto.UsersIds);
+            //await _subjectLogic.ValidateUsersForSubject(createSubjectDto.UsersIds);
 
             var subjectDomain = new Subject
             {
@@ -129,7 +150,7 @@ namespace testAPI.Services
                 Semester = createSubjectDto.Semester,
                 ECTS=createSubjectDto.ECTS,
                 Description = createSubjectDto.Description,
-                SubjectsUsers = await GetUsersForSubject(createSubjectDto.UsersIds),
+                //SubjectsUsers = await GetUsersForSubject(createSubjectDto.UsersIds),
                 DepartmentsSubjects = await GetDepartmentsForSubject(createSubjectDto.DepartmentsIds)
             };
 
@@ -145,6 +166,10 @@ namespace testAPI.Services
                                                    .ThenInclude(ds => ds.Department)
                                                    .Include(s => s.SubjectsNotifications)
                                                    .ThenInclude(sn =>sn.Notification)
+                                                   .Include(s =>s.SubjectActivities)
+                                                   .ThenInclude(sa => sa.ActivityType)
+                                                   .Include(s => s.SubjectActivities)
+                                                   .ThenInclude(sa => sa.Instructor)
                                                    .FirstOrDefaultAsync(u => u.Id == subjectDomain.Id);
             
             if (subjectDomain is null)
@@ -170,6 +195,12 @@ namespace testAPI.Services
                 {
                     Id = ds.Department.Id,
                     Name = ds.Department.Name
+                }).ToList(),
+                Activities = subjectDomain.SubjectActivities.Select(sa => new SubjectActivityDto
+                {
+                    Id = sa.Id,
+                    Activity = sa.ActivityType.Name,
+                    Instructor = $"{sa.Instructor.FirstName} {sa.Instructor.LastName}"
                 }).ToList()
             };
 
@@ -193,10 +224,10 @@ namespace testAPI.Services
             subjectDomain.ECTS = updateSubjectDto.ECTS;
             subjectDomain.Description = updateSubjectDto.Description;
 
-            await _subjectLogic.ValidateUsersForSubject(updateSubjectDto.UsersIds);
+            //await _subjectLogic.ValidateUsersForSubject(updateSubjectDto.UsersIds);
             //await _subjectLogic.ValidateDepartmentsForSubject(id, updateSubjectDto.DepartmentsIds);
 
-            subjectDomain.SubjectsUsers = await GetUsersForSubject(updateSubjectDto.UsersIds);
+            //subjectDomain.SubjectsUsers = await GetUsersForSubject(updateSubjectDto.UsersIds);
             subjectDomain.DepartmentsSubjects = await GetDepartmentsForSubject(updateSubjectDto.DepartmentsIds);
 
             _dbContext.Subjects.Update(subjectDomain);
@@ -210,6 +241,10 @@ namespace testAPI.Services
                                                    .ThenInclude(ds => ds.Department)
                                                    .Include(s => s.SubjectsNotifications)
                                                    .ThenInclude(sn => sn.Notification)
+                                                   .Include(s => s.SubjectActivities)
+                                                   .ThenInclude(sa => sa.ActivityType)
+                                                   .Include(s => s.SubjectActivities)
+                                                   .ThenInclude(sa => sa.Instructor)
                                                    .FirstOrDefaultAsync(s => s.Id == subjectDomain.Id);
 
             if (subjectDomain is null)
@@ -234,6 +269,12 @@ namespace testAPI.Services
                 {
                     Id = ds.Department.Id,
                     Name = ds.Department.Name
+                }).ToList(),
+                Activities = subjectDomain.SubjectActivities.Select(sa => new SubjectActivityDto
+                {
+                    Id = sa.Id,
+                    Activity = sa.ActivityType.Name,
+                    Instructor = $"{sa.Instructor.FirstName} {sa.Instructor.LastName}"
                 }).ToList()
             };
 
@@ -250,6 +291,10 @@ namespace testAPI.Services
                                                          .ThenInclude(ds => ds.Department)
                                                          .Include(s => s.SubjectsNotifications)
                                                          .ThenInclude(sn => sn.Notification)
+                                                         .Include(s => s.SubjectActivities)
+                                                         .ThenInclude(sa => sa.ActivityType)
+                                                         .Include(s => s.SubjectActivities)
+                                                         .ThenInclude(sa => sa.Instructor)
                                                          .FirstOrDefaultAsync(s => s.Id == id);
 
             if (subjectDomain is null)
@@ -274,6 +319,12 @@ namespace testAPI.Services
                 {
                     Id = ds.Department.Id,
                     Name = ds.Department.Name
+                }).ToList(),
+                Activities = subjectDomain.SubjectActivities.Select(sa => new SubjectActivityDto
+                {
+                    Id = sa.Id,
+                    Activity = sa.ActivityType.Name,
+                    Instructor = $"{sa.Instructor.FirstName} {sa.Instructor.LastName}"
                 }).ToList(),
                 Notifications = subjectDomain.SubjectsNotifications.Select(sn => new SubjectNotificationsDto
                 {

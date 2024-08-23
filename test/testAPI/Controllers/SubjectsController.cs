@@ -20,7 +20,7 @@ namespace testAPI.Controllers
             _subjectService = subjectService;
         }
 
-        [Authorize(Policy = "AnyUserRole")]
+        [Authorize(Policy = RolesConstant.AnyUserRole)]
         [HttpGet]
         public async Task<List<SubjectDto>> GetAll([FromQuery] SubjectQuery subjectQuery)
         {
@@ -28,7 +28,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "AnyUserRole")]
+        [Authorize(Policy = RolesConstant.AnyUserRole)]
         [HttpGet("{id}")]
         public async Task<SubjectDto> GetById([FromRoute] int id)
         {
@@ -36,7 +36,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "AdminPermission")]
+        [Authorize(Policy = RolesConstant.Administrator)]
         [HttpPost]
         public async Task<SubjectDto> Create([FromBody] CreateSubjectDto createSubjectDto)
         {
@@ -44,7 +44,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "AdminPermission")]
+        [Authorize(Policy = RolesConstant.Administrator)]
         [HttpPatch("{id}")]
         public async Task<SubjectDto> Update([FromRoute] int id, [FromBody] UpdateSubjectDto updateSubjectDto)
         {
@@ -52,7 +52,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "Adminpermission")]
+        [Authorize(Policy = RolesConstant.Administrator)]
         [HttpDelete("{id}")]
         public async Task<SubjectDto> Delete([FromRoute] int id) 
         {

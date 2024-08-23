@@ -9,6 +9,7 @@
         public string Description { get; set; }
         public ICollection<SubjectUsersDto> Users { get; set;}
         public ICollection<SubjectDepartmentsDto> Departments { get; set; }
+        public ICollection<SubjectActivityDto> Activities { get; set; }
         public ICollection<SubjectNotificationsDto> Notifications { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using testAPI.Constants;
 using testAPI.Interfaces;
 using testAPI.Models.DTO.StudentAttendanceDtos;
 using testAPI.Query;
@@ -19,7 +20,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "AnyUserRole")]
+        [Authorize(Policy = RolesConstant.AnyUserRole)]
         [HttpGet]
         public async Task<List<StudentAttendanceDto>> GetAll([FromQuery] StudentAttendanceQuery studentAttendanceQuery)
         {
@@ -27,7 +28,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "AnyUserRole")]
+        [Authorize(Policy = RolesConstant.AnyUserRole)]
         [HttpGet("{id}")]
         public async Task<StudentAttendanceDto> GetById([FromRoute] int id)
         {
@@ -35,7 +36,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "Admin/Professor/Asistant")]
+        [Authorize(Policy = RolesConstant.AdminProfesorAsistent)]
         [HttpPost]
         public async Task<StudentAttendanceDto> Create([FromBody] CreateStudentAttendanceDto createStudentAttendanceDto)
         {
@@ -43,7 +44,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "Admin/Professor/Asistant")]
+        [Authorize(Policy = RolesConstant.AdminProfesorAsistent)]
         [HttpPatch("{id}")]
         public async Task<StudentAttendanceDto> UpdateById([FromRoute] int id, [FromBody] UpdateStudentAttendanceDto updateStudentAttendanceDto)
         {
@@ -51,7 +52,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "Admin/Professor/Asistant")]
+        [Authorize(Policy = RolesConstant.AdminProfesorAsistent)]
         [HttpDelete("{id}")]
         public async Task<StudentAttendanceDto> DeleteById([FromRoute] int id)
         {

@@ -1,5 +1,7 @@
 ﻿using eStudent.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using testAPI.Constants;
 using testAPI.Interfaces;
 using testAPI.Models.Domain;
 using testAPI.Models.DTO.UserDtos;
@@ -19,6 +21,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = RolesConstant.AnyUserRole)]
         [HttpGet]
         public async Task<List<UserDto>> GetAll([FromQuery] UserQuery userQuery)
         {
@@ -26,6 +29,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = RolesConstant.AnyUserRole)]
         [HttpGet("{id}")]
         public async Task<UserDto> GetById([FromRoute] int id)
         {
@@ -33,6 +37,7 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = RolesConstant.Administrator)]
         [HttpPost]
         public async Task<UserDto> Create([FromBody] CreateUserDto createUserDto)
         {
@@ -40,12 +45,15 @@ namespace testAPI.Controllers
         }
 
 
+        [Authorize(Policy = RolesConstant.Administrator)]
         [HttpPatch("{id}")]
         public async Task<UserDto> Update([FromRoute] int id, [FromBody] UpdateUserDto updatedUserDto)
         {
             return await _userService.UpdateUserById(id, updatedUserDto);
         }
 
+
+        [Authorize(Policy = RolesConstant.Administrator)]
         [HttpDelete("{id}")]
         public async Task<UserDto> Delete([FromRoute] int id) 
         {

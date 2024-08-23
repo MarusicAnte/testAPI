@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using testAPI.Constants;
 using testAPI.Interfaces;
 using testAPI.Models.DTO.DepartmentDtos;
 
@@ -19,7 +20,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "AnyUserRole")]
+        [Authorize(Policy = RolesConstant.AnyUserRole)]
         [HttpGet]
         public async Task<List<DepartmentDto>> GetAll()
         {
@@ -27,7 +28,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "AnyUserRole")]
+        [Authorize(Policy = RolesConstant.AnyUserRole)]
         [HttpGet("{id}")]
         public async Task<DepartmentDto> GetById([FromRoute] int id)
         {
@@ -35,7 +36,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "AdminPermission")]
+        [Authorize(Policy = RolesConstant.Administrator)]
         [HttpPost]
         public async Task<DepartmentDto> Create([FromBody] CreateDepartmentDto createDepartmentDto)
         {
@@ -43,7 +44,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "AdminPermission")]
+        [Authorize(Policy = RolesConstant.Administrator)]
         [HttpPatch("{id}")]
         public async Task<DepartmentDto> UpdateById([FromRoute] int id, [FromBody] UpdateDepartmentDto updateDepartmentDto)
         {
@@ -51,7 +52,7 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "AdminPermission")]
+        [Authorize(Policy = RolesConstant.Administrator)]
         [HttpDelete("{id}")]
         public async Task<DepartmentDto> DeleteById([FromRoute] int id)
         {

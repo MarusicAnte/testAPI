@@ -36,7 +36,7 @@ namespace testAPI.Services
                 Email = userDomain.Email,
                 Password = userDomain.Password,
                 ImageURL = userDomain.ImageURL,
-                Role = userDomain.Role.Name,
+                Role = userDomain.Role,
                 Subjects = userDomain.SubjectsUsers.Select(su => new UserSubjectDto
                 {
                     Id = su.Subject.Id,
@@ -79,7 +79,7 @@ namespace testAPI.Services
                 Email = userDomain.Email,
                 Password = userDomain.Password,
                 ImageURL = userDomain.ImageURL,
-                Role = userDomain.Role.Name,
+                Role = userDomain.Role,
                 Subjects = userDomain.SubjectsUsers.Select(su => new UserSubjectDto
                 {
                     Id = su.Subject.Id,
@@ -119,6 +119,7 @@ namespace testAPI.Services
 
             // Get new created user
             userDomain = await _dbContext.Users
+                .Include(u => u.Role)
                 .Include(u => u.SubjectsUsers)
                 .ThenInclude(su => su.Subject)
                 .Include(u => u.DepartmentsUsers)
@@ -137,7 +138,7 @@ namespace testAPI.Services
                 Email = userDomain.Email,
                 Password = userDomain.Password,
                 ImageURL = userDomain.ImageURL,
-                Role = userDomain.Role.Name,
+                Role = userDomain.Role,
                 Subjects = userDomain.SubjectsUsers.Select(su => new UserSubjectDto
                 {
                     Id = su.Subject.Id,
@@ -205,7 +206,7 @@ namespace testAPI.Services
                 Email = updatedUserDomain.Email,
                 Password = updatedUserDomain.Password,
                 ImageURL = updatedUserDomain.ImageURL,
-                Role = updatedUserDomain.Role.Name,
+                Role = updatedUserDomain.Role,
                 Subjects = updatedUserDomain.SubjectsUsers.Select(su => new UserSubjectDto
                 {
                     Id = su.Subject.Id,
@@ -247,7 +248,7 @@ namespace testAPI.Services
                 Email = userDomain.Email,
                 Password = userDomain.Password,
                 ImageURL = userDomain.ImageURL,
-                Role = userDomain.Role.Name,
+                Role = userDomain.Role,
                 Subjects = userDomain.SubjectsUsers.Select(su => new UserSubjectDto
                 {
                     Id = su.Subject.Id,
@@ -309,13 +310,13 @@ namespace testAPI.Services
             var user = await _dbContext.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email);
 
             if (user is null)
-                return null;
+                throw new Exception("Invalid email or password !");
 
             
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
 
             if (!isPasswordValid)
-                return null;
+                throw new Exception("Invalid email or password !");
 
             return user;
         }

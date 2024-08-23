@@ -6,5 +6,7 @@
         public const string Profesor = "Profesor";
         public const string Asistent = "Asistent";
         public const string Student = "Student";
+        public const string AnyUserRole = "AnyUserRole";
+        public const string AdminProfesorAsistent = "AdminProfesorAsistent";
     }
 }

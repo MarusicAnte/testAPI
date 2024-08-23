@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using testAPI.Data;
 using testAPI.Interfaces;
 using testAPI.Logic;
@@ -38,12 +37,13 @@ namespace testAPI.Services
                CreatedTime = notificationDomain.CreatedTime,
                Title = notificationDomain.Title,
                Description = notificationDomain.Description,
-               SenderId = notificationDomain.SenderId,
+               Sender = $"{notificationDomain.Sender.FirstName} {notificationDomain.Sender.LastName}",
                Subjects = notificationDomain.SubjectsNotifications.Select(s => new NotificationSubjectsDto
                {
                    Id = s.Subject.Id,
                    Name = s.Subject.Name,
-                   Semester = s.Subject.Semester
+                   Semester = s.Subject.Semester,
+                   ECTS = s.Subject.ECTS
                }).ToList()
            }).ToList();
         }
@@ -65,12 +65,13 @@ namespace testAPI.Services
                 CreatedTime = notificationDomain.CreatedTime,
                 Title = notificationDomain.Title,
                 Description = notificationDomain.Description,
-                SenderId = notificationDomain.SenderId,
+                Sender = $"{notificationDomain.Sender.FirstName} {notificationDomain.Sender.LastName}",
                 Subjects = notificationDomain.SubjectsNotifications.Select(s => new NotificationSubjectsDto
                 {
                     Id = s.Subject.Id,
                     Name = s.Subject.Name,
-                    Semester = s.Subject.Semester
+                    Semester = s.Subject.Semester,
+                    ECTS = s.Subject.ECTS
                 }).ToList()
             };
 
@@ -110,12 +111,13 @@ namespace testAPI.Services
                 Id = notificationDomain.Id,
                 Title = notificationDomain.Title,
                 Description = notificationDomain.Description,
-                SenderId = notificationDomain.SenderId,
+                Sender = $"{notificationDomain.Sender.FirstName} {notificationDomain.Sender.LastName}",
                 Subjects = notificationDomain.SubjectsNotifications.Select(s => new NotificationSubjectsDto
                 {
                     Id = s.Subject.Id,
                     Name = s.Subject.Name,
-                    Semester = s.Subject.Semester
+                    Semester = s.Subject.Semester,
+                    ECTS = s.Subject.ECTS
                 }).ToList()
             };
 
@@ -158,12 +160,13 @@ namespace testAPI.Services
                 Id = notificationDomain.Id,
                 Title = notificationDomain.Title,
                 Description = notificationDomain.Description,
-                SenderId = notificationDomain.SenderId,
+                Sender = $"{notificationDomain.Sender.FirstName} {notificationDomain.Sender.LastName}",
                 Subjects = notificationDomain.SubjectsNotifications.Select(s => new NotificationSubjectsDto
                 {
                     Id = s.Subject.Id,
                     Name = s.Subject.Name,
-                    Semester = s.Subject.Semester
+                    Semester = s.Subject.Semester,
+                    ECTS = s.Subject.ECTS
                 }).ToList()
             };
 
@@ -186,12 +189,13 @@ namespace testAPI.Services
                 Id = notificationDomain.Id,
                 Title = notificationDomain.Title,
                 Description = notificationDomain.Description,
-                SenderId = notificationDomain.SenderId,
+                Sender = $"{notificationDomain.Sender.FirstName} {notificationDomain.Sender.LastName}",
                 Subjects = notificationDomain.SubjectsNotifications.Select(s => new NotificationSubjectsDto
                 {
                     Id = s.Subject.Id,
                     Name = s.Subject.Name,
-                    Semester = s.Subject.Semester
+                    Semester = s.Subject.Semester,
+                    ECTS = s.Subject.ECTS
                 }).ToList()
             };
 

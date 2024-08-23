@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using testAPI.Constants;
 using testAPI.Interfaces;
 using testAPI.Models.DTO.SubjectActivityDtos;
 using testAPI.Query;
@@ -19,41 +20,41 @@ namespace testAPI.Controllers
         }
 
 
-        [Authorize(Policy = "AnyUserRole")]
+        [Authorize(Policy = RolesConstant.AnyUserRole)]
         [HttpGet]
-        public async Task<List<SubjectActivityDto>> GetAll([FromQuery] SubjectActivityQuery subjectActivityQuery)
+        public async Task<List<ActivityDto>> GetAll([FromQuery] SubjectActivityQuery subjectActivityQuery)
         {
             return await _subjectActivityService.GetAllSubjectActivities(subjectActivityQuery);
         }
 
 
-        [Authorize(Policy = "AnyUserRole")]
+        [Authorize(Policy = RolesConstant.AnyUserRole)]
         [HttpGet("{id}")]
-        public async Task<SubjectActivityDto> GetById([FromRoute] int id)
+        public async Task<ActivityDto> GetById([FromRoute] int id)
         {
             return await _subjectActivityService.GetSubjectActivityById(id);
         }
 
 
-        [Authorize(Policy = "AdminPermission")]
+        [Authorize(Policy = RolesConstant.Administrator)]
         [HttpPost]
-        public async Task<SubjectActivityDto> Create([FromBody] CreateSubjectActivityDto createSubjectActivityDto)
+        public async Task<ActivityDto> Create([FromBody] CreateSubjectActivityDto createSubjectActivityDto)
         {
             return await _subjectActivityService.CreateSubjectActivity(createSubjectActivityDto);
         }
 
 
-        [Authorize(Policy = "AdminPermission")]
+        [Authorize(Policy = RolesConstant.Administrator)]
         [HttpPatch("{id}")]
-        public async Task<SubjectActivityDto> UpdateById([FromRoute] int id, [FromBody] UpdateSubjectActivityDto updateSubjectActivityDto)
+        public async Task<ActivityDto> UpdateById([FromRoute] int id, [FromBody] UpdateSubjectActivityDto updateSubjectActivityDto)
         {
             return await _subjectActivityService.UpdateSubjectActivityById(id, updateSubjectActivityDto);
         }
 
 
-        [Authorize(Policy = "AdminPermission")]
+        [Authorize(Policy = RolesConstant.Administrator)]
         [HttpDelete("{id}")]
-        public async Task<SubjectActivityDto> DeleteById([FromRoute] int id)
+        public async Task<ActivityDto> DeleteById([FromRoute] int id)
         {
             return await _subjectActivityService.DeleteSubjectActivityById(id);
         }

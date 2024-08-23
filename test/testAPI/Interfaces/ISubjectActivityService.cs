@@ -5,10 +5,10 @@ namespace testAPI.Interfaces
 {
     public interface ISubjectActivityService
     {
-        public Task<List<SubjectActivityDto>> GetAllSubjectActivities(SubjectActivityQuery subjectActivityQuery);
-        public Task<SubjectActivityDto> GetSubjectActivityById(int id);
-        public Task<SubjectActivityDto> CreateSubjectActivity(CreateSubjectActivityDto createSubjectActivityDto);
-        public Task<SubjectActivityDto> UpdateSubjectActivityById(int id, UpdateSubjectActivityDto updateSubjectActivityDto);
-        public Task<SubjectActivityDto> DeleteSubjectActivityById(int id);
+        public Task<List<ActivityDto>> GetAllSubjectActivities(SubjectActivityQuery subjectActivityQuery);
+        public Task<ActivityDto> GetSubjectActivityById(int id);
+        public Task<ActivityDto> CreateSubjectActivity(CreateSubjectActivityDto createSubjectActivityDto);
+        public Task<ActivityDto> UpdateSubjectActivityById(int id, UpdateSubjectActivityDto updateSubjectActivityDto);
+        public Task<ActivityDto> DeleteSubjectActivityById(int id);
     }
 }
